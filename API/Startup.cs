@@ -1,10 +1,17 @@
-using INFRASTRUCTURE.DI;
+using System.Text;
+using API.Extensions.Di;
+using CORE.Interfaces;
+using INFRASTRUCTURE.Data;
+using INFRASTRUCTURE.Identity.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace API
@@ -22,11 +29,15 @@ namespace API
         {
             services.AddControllers();
 
-            services.AddInfrastructure(_config);
+            services.AddServices(_config);
+            services.AddAuth( _config);
             
-            services.AddIdentity<IdentityUser, IdentityRole>();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", 
-                new OpenApiInfo { Title = "API", Version = "v1" }); });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo { Title = "API", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
