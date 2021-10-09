@@ -1,5 +1,7 @@
+using INFRASTRUCTURE.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +21,10 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddInfrastructure(_config);
+            
+            services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", 
                 new OpenApiInfo { Title = "API", Version = "v1" }); });
         }
