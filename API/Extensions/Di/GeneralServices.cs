@@ -1,10 +1,14 @@
+using MediatR;
+using MEDIATOR;
 using CORE.Interfaces;
 using INFRASTRUCTURE.Data;
+using Microsoft.EntityFrameworkCore;
 using INFRASTRUCTURE.Identity.Options;
 using INFRASTRUCTURE.Identity.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+
 
 namespace API.Extensions.Di
 {
@@ -13,13 +17,17 @@ namespace API.Extensions.Di
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericEfRepository<>));
-            services.AddScoped<ITokenService,TokenService>();
+            //services.AddScoped<ITokenService,TokenService>();
 
             services.AddDbContext<AppDbContext>(c =>
                 c.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             
 
-            services.Configure<JwtConfig>(c => config.GetSection("JwtConfig"));
+           // services.Configure<JwtConfig>(c => config.GetSection("JwtConfig")
+                //.Bind("JwtConfig")
+           // );
+
+            services.AddMediatR(typeof(class1).Assembly);
 
             return services;
         }

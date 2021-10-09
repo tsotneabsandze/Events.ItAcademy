@@ -17,7 +17,7 @@ namespace API.Extensions.Di
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            var key = Encoding.ASCII.GetBytes(config.Get<JwtConfig>().Secret);
+            var key = Encoding.ASCII.GetBytes(config.GetSection("JwtConfig").GetSection("Secret").Value);
             services.AddAuthentication(opt =>
             {
                 opt.DefaultScheme

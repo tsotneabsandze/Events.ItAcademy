@@ -1,18 +1,15 @@
-using System.Text;
 using API.Extensions.Di;
-using CORE.Interfaces;
-using INFRASTRUCTURE.Data;
-using INFRASTRUCTURE.Identity.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using API.Extensions.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+
 
 namespace API
 {
@@ -27,27 +24,34 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(opt =>
+                {
+                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status500InternalServerError));
+                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
+                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
+                    opt.Filters.Add(new ConsumesAttribute("application/json"));
+
+                    opt.ReturnHttpNotAcceptable = true;
+                }
+            );
 
             services.AddServices(_config);
-            services.AddAuth( _config);
-            
+            services.AddAuth(_config);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo { Title = "API", Version = "v1" });
-            });
+            services.AddVersioning();
+            services.AddVersionAwareApiExplorer();
+            services.AddSwaggerDocumentation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IApiVersionDescriptionProvider descProvider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
+
+            app.UseSwaggerDocumentation(descProvider);
 
             app.UseHttpsRedirection();
 

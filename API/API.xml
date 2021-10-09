@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="M:API.Controllers.V2.EventsController.Test">
+            <summary>
+            test comment from summary
+            </summary>
+            <param name="id">id</param>
+        </member>
+    </members>
+</doc>
