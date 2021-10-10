@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace CORE.Interfaces
+namespace INFRASTRUCTURE.Identity.Services.Abstractions
 {
     public interface ITokenService
     {
