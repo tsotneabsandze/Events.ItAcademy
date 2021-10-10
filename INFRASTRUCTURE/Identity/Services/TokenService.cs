@@ -42,7 +42,7 @@ namespace INFRASTRUCTURE.Identity.Services
             var descriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims.ToArray()),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(_options.Value.Expiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };

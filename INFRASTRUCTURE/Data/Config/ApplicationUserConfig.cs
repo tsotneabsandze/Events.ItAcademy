@@ -9,7 +9,9 @@ namespace INFRASTRUCTURE.Data.Config
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.HasMany(x => x.Events)
-                .WithOne();
+                .WithOne()
+                .HasForeignKey(e=>e.UserId)
+                .IsRequired(false);
         }
     }
 }

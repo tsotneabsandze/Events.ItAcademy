@@ -18,7 +18,10 @@ namespace INFRASTRUCTURE.Data
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            => modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
 
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

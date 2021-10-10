@@ -1,6 +1,6 @@
 using System.Text;
 using INFRASTRUCTURE.Data;
-using INFRASTRUCTURE.Identity.Options;
+using INFRASTRUCTURE.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -13,17 +13,24 @@ namespace API.Extensions.Di
     {
         public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration config)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 3;
+            });
 
             var key = Encoding.ASCII.GetBytes(config.GetSection("JwtConfig").GetSection("Secret").Value);
             services.AddAuthentication(opt =>
             {
-                opt.DefaultScheme
-                    = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme
-                    = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;
