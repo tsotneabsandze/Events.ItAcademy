@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using FluentValidation.AspNetCore;
+using MEDIATOR.Account.Queries.GetUserDetails;
 
 
 namespace API
@@ -33,7 +35,10 @@ namespace API
 
                     opt.ReturnHttpNotAcceptable = true;
                 }
-            );
+            ).AddFluentValidation(configuration =>
+            {
+                configuration.RegisterValidatorsFromAssemblyContaining<GetUserDetailsQuery>();
+            });
 
             services.AddServices(_config);
             services.AddAuth(_config);

@@ -1,12 +1,12 @@
 using MediatR;
-using MEDIATOR;
 using CORE.Interfaces;
 using INFRASTRUCTURE.Data;
 using Microsoft.EntityFrameworkCore;
 using INFRASTRUCTURE.Identity.Options;
-using INFRASTRUCTURE.Identity.Services;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using INFRASTRUCTURE.Identity.Services.Implementations;
+using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Common.Behaviours;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,8 +28,10 @@ namespace API.Extensions.Di
             services.Configure<JwtConfig>(c => config.GetSection("JwtConfig")
                 .Bind("JwtConfig"));
 
-            services.AddMediatR(typeof(class1).Assembly);
+            services.AddMediatR(typeof(GetUserDetailsQuery).Assembly);
             services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>),
+                typeof(RequestValidationBehaviour<,>));
 
             return services;
         }
