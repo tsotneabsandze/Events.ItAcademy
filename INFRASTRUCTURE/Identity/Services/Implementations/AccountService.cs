@@ -28,10 +28,7 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-                throw new ResourceNotFoundException("user can not be found");
-
+            
             return user;
         }
         

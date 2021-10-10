@@ -56,6 +56,15 @@ namespace API.Middlewares.ExceptionHandling
             LogLevel = LogLevel.Information;
         }
         
+        private void BindException(UnauthorizedException ex)
+        {
+            Name = HttpStatusCode.Unauthorized.ToString();
+            Status = (int) HttpStatusCode.Unauthorized;
+            Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1";
+            Title = ex.Message;
+            LogLevel = LogLevel.Information;
+        }
+        
         private void BindException(Exception exception)
         {
         }

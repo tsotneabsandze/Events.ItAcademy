@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using MEDIATOR.Account.Commands.DeleteUser;
 using MEDIATOR.Account.Commands.RegisterUser;
+using MEDIATOR.Account.Commands.SignInUser;
 using MEDIATOR.Account.Queries.GetUserDetails;
 using MEDIATOR.Account.Queries.GetUsersList;
 using MEDIATOR.Common.Models;
@@ -48,9 +49,10 @@ namespace API.Controllers.V1
         }
 
         [HttpPost("SignIn")]
-        public async Task<ActionResult<AuthResult>> SignIn()
+        public async Task<ActionResult<AuthResult>> SignIn([FromBody]SignInUserCommand command)
         {
-            return Ok();
+            var res = await Mediator.Send(command);
+            return Ok(res);
         }
         
         
