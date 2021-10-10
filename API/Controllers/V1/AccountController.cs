@@ -3,6 +3,7 @@ using MEDIATOR.Account.Commands.DeleteUser;
 using MEDIATOR.Account.Commands.RegisterUser;
 using MEDIATOR.Account.Queries.GetUserDetails;
 using MEDIATOR.Account.Queries.GetUsersList;
+using MEDIATOR.Common.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,11 +40,19 @@ namespace API.Controllers.V1
             return NoContent();
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterUserCommand command)
+        [HttpPost("Register")]
+        public async Task<ActionResult<AuthResult>> Register([FromBody]RegisterUserCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost("SignIn")]
+        public async Task<ActionResult<AuthResult>> SignIn()
+        {
+            return Ok();
+        }
+        
+        
     }
 }

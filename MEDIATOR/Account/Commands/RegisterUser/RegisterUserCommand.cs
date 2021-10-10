@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using INFRASTRUCTURE.Identity.Models;
@@ -12,6 +11,8 @@ namespace MEDIATOR.Account.Commands.RegisterUser
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
 
         public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, AuthResult>
         {
@@ -29,7 +30,9 @@ namespace MEDIATOR.Account.Commands.RegisterUser
                 var user = new ApplicationUser
                 {
                     Email = request.Email,
-                    UserName = request.Email
+                    UserName = request.Email,
+                    Name = request.Name,
+                    LastName = request.LastName
                 };
 
                 var id = await _accountService.CreateAsync(user, request.Password, cancellationToken);

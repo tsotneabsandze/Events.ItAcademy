@@ -10,7 +10,9 @@ namespace INFRASTRUCTURE.Identity.Models
         {
             Events = new HashSet<Event>();
         }
-        
+
+        public string Name { get; set; }    
+        public string LastName { get; set; }
         public ICollection<Event> Events { get; set; }
     }
 }

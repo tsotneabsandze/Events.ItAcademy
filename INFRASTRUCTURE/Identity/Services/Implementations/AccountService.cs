@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Exceptions;
@@ -9,7 +8,7 @@ using INFRASTRUCTURE.Identity.Models;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+    
 namespace INFRASTRUCTURE.Identity.Services.Implementations
 {
     public class AccountService : IAccountService
@@ -17,8 +16,7 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            ITokenService tokenService)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

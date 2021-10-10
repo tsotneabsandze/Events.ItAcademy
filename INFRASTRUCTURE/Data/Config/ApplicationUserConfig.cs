@@ -12,6 +12,14 @@ namespace INFRASTRUCTURE.Data.Config
                 .WithOne()
                 .HasForeignKey(e=>e.UserId)
                 .IsRequired(false);
+
+            builder.Property(x => x.Name)
+                .HasColumnType("nvarchar(50)")
+                .IsRequired();
+
+            builder.Property(x => x.LastName)
+                .HasColumnType("nvarchar(50)")
+                .IsRequired();
         }
     }
 }

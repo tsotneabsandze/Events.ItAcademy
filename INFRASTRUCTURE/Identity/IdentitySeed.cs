@@ -50,33 +50,31 @@ namespace INFRASTRUCTURE.Identity
                 new ApplicationUser
                 {
                     UserName = "Basic.1@gmail.com",
-                    Email = "Basic.1@gmail.com"
+                    Email = "Basic.1@gmail.com",
+                    Name = "Basic1",
+                    LastName = "Basic1"
                 },
                 new ApplicationUser
                 {
                     UserName = "Basic.2@gmail.com",
                     Email ="Basic.2@gmail.com",
+                    Name = "Basic2",
+                    LastName = "Basic2"
                 },
                 new ApplicationUser
                 {
                     UserName = "Basic.3@gmail.com",
                     Email = "Basic.3@gmail.com",
+                    Name = "Basic3",
+                    LastName = "Basic3"
                 },
                 new ApplicationUser
                 {
                     UserName = "Basic.4@gmail.com",
                     Email = "Basic.4@gmail.com",
-                },
-                new ApplicationUser
-                {
-                    UserName = "Basic.5@gmail.com",
-                    Email = "Basic.5@gmail.com",
-                },
-                new ApplicationUser
-                {
-                    UserName = "Basic.6@gmail.com",
-                    Email = "Basic.6@gmail.com",
-                },
+                    Name = "Basic4",
+                    LastName = "Basic4"
+                }
             };
             
             
@@ -97,6 +95,8 @@ namespace INFRASTRUCTURE.Identity
             {
                 UserName = "Admin.1@gmail.com",
                 Email = "Admin.1@gmail.com",
+                Name = "Admin",
+                LastName = "Admin"
             };
             
             if (await userManager.Users.AllAsync(u => u.Id != admin.Id))
