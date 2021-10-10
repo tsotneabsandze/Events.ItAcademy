@@ -5,6 +5,8 @@ using INFRASTRUCTURE.Data;
 using Microsoft.EntityFrameworkCore;
 using INFRASTRUCTURE.Identity.Options;
 using INFRASTRUCTURE.Identity.Services;
+using INFRASTRUCTURE.Identity.Services.Abstractions;
+using INFRASTRUCTURE.Identity.Services.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +29,7 @@ namespace API.Extensions.Di
                 .Bind("JwtConfig"));
 
             services.AddMediatR(typeof(class1).Assembly);
+            services.AddScoped<IAccountService, AccountService>();
 
             return services;
         }

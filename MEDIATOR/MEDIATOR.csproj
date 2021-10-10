@@ -5,15 +5,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="10.3.3" />
+      <PackageReference Include="Mapster" Version="7.2.0" />
       <PackageReference Include="MediatR" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Account\Commands" />
-      <Folder Include="Account\Queries" />
-      <Folder Include="Common" />
+      <Folder Include="Common\Models" />
       <Folder Include="Events\Commands" />
       <Folder Include="Events\Queries" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\INFRASTRUCTURE\INFRASTRUCTURE.csproj" />
     </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ namespace API.Controllers.V2
         /// <summary>
         /// test comment from summary
         /// </summary>
-        /// <param name="id">id</param>
+        
         [HttpGet]
         public IActionResult Test()
         {

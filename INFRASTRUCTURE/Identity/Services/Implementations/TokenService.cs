@@ -5,13 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using INFRASTRUCTURE.Identity.Models;
 using INFRASTRUCTURE.Identity.Options;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace INFRASTRUCTURE.Identity.Services
+namespace INFRASTRUCTURE.Identity.Services.Implementations
 {
     public class TokenService : ITokenService
     {

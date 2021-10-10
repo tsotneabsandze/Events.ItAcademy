@@ -1,6 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Exceptions;
+using INFRASTRUCTURE.Identity.Models;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,12 +14,14 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            ITokenService tokenService)
+            ITokenService tokenService, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
 
@@ -33,14 +39,13 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
 
             if (user is null)
                 throw new ResourceNotFoundException("user can not be found");
-
+            
             return user;
         }
 
         public async Task<bool> DeleteUserAsync(ApplicationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
-            
             return result.Succeeded;
         }
 
@@ -49,6 +54,11 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
             var result = await _signInManager.CheckPasswordSignInAsync(user,password,false);
             return result.Succeeded;
         }
-        
+
+        public async Task<IReadOnlyList<string>> GetRolesForUserAsync(ApplicationUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.ToList();
+        }
     }
 }

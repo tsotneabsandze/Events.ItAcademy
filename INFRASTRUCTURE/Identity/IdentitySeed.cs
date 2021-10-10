@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using INFRASTRUCTURE.Data;
 using INFRASTRUCTURE.Identity.Constants;
 using INFRASTRUCTURE.Identity.Enums;
+using INFRASTRUCTURE.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

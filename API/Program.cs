@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using INFRASTRUCTURE.Data;
 using INFRASTRUCTURE.Identity;
+using INFRASTRUCTURE.Identity.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
