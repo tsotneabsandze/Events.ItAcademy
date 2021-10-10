@@ -4,13 +4,6 @@
         <name>API</name>
     </assembly>
     <members>
-        <member name="M:API.Controllers.V1.AccountController.GetUserByEmail(System.String)">
-            <summary>
-            gets user details by id
-            </summary>
-            <param name="email">email</param>
-            <returns></returns>
-        </member>
         <member name="M:API.Controllers.V2.EventsController.Test">
             <summary>
             test comment from summary

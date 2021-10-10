@@ -13,7 +13,6 @@ namespace API.Controllers.V1
            Description = "description")]
         public IActionResult Test()
         {
-            throw new IdentifierMismatchException("test test");
             return Ok();
         }
     }

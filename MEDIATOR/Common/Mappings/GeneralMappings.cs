@@ -1,7 +1,7 @@
-using INFRASTRUCTURE.Identity;
 using INFRASTRUCTURE.Identity.Models;
 using Mapster;
 using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Account.Queries.GetUsersList;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MEDIATOR.Common.Mappings
@@ -12,6 +12,10 @@ namespace MEDIATOR.Common.Mappings
         {
             TypeAdapterConfig<ApplicationUser, UserDetailsVm>
                 .NewConfig();
+            
+            TypeAdapterConfig<ApplicationUser, UserLookupDto>
+                .NewConfig();
+            
 
         }
     }

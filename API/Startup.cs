@@ -32,10 +32,12 @@ namespace API
                     opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
                     opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
                     opt.Filters.Add(new ConsumesAttribute("application/json"));
+                    opt.Filters.Add(new ProducesAttribute("application/json"));
 
                     opt.ReturnHttpNotAcceptable = true;
                 }
-            ).AddFluentValidation(configuration =>
+            ).AddNewtonsoftJson()
+                .AddFluentValidation(configuration =>
             {
                 configuration.RegisterValidatorsFromAssemblyContaining<GetUserDetailsQuery>();
             });

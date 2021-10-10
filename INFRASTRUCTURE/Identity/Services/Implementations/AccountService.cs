@@ -7,6 +7,7 @@ using CORE.Exceptions;
 using INFRASTRUCTURE.Identity.Models;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace INFRASTRUCTURE.Identity.Services.Implementations
 {
@@ -30,7 +31,6 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
         {
             var result = await _userManager.CreateAsync(user, password);
             return result.Succeeded;
-
         }
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
@@ -39,7 +39,7 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
 
             if (user is null)
                 throw new ResourceNotFoundException("user can not be found");
-            
+
             return user;
         }
 
@@ -51,7 +51,7 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
 
         public async Task<bool> SignInAsync(ApplicationUser user, string password)
         {
-            var result = await _signInManager.CheckPasswordSignInAsync(user,password,false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
             return result.Succeeded;
         }
 
@@ -60,5 +60,8 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
             var roles = await _userManager.GetRolesAsync(user);
             return roles.ToList();
         }
+
+        public async Task<IReadOnlyList<ApplicationUser>> GetAllAsync(CancellationToken cancellationToken = default)
+            => await _userManager.Users.ToListAsync(cancellationToken);
     }
 }
