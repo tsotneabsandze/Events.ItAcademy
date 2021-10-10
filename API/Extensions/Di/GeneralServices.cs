@@ -25,8 +25,7 @@ namespace API.Extensions.Di
                 c.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             
 
-            services.Configure<JwtConfig>(c => config.GetSection("JwtConfig")
-                .Bind("JwtConfig"));
+            services.Configure<JwtConfig>(config.GetSection("JwtConfig"));
 
             services.AddMediatR(typeof(GetUserDetailsQuery).Assembly);
             services.AddScoped<IAccountService, AccountService>();

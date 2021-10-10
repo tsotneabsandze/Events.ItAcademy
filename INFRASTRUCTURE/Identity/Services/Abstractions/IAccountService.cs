@@ -7,7 +7,7 @@ namespace INFRASTRUCTURE.Identity.Services.Abstractions
 {
     public interface IAccountService
     {
-        Task<bool> CreateAsync(ApplicationUser applicationUser, string password,
+        Task<string> CreateAsync(ApplicationUser user, string password,
             CancellationToken cancellationToken = default);
 
         Task<ApplicationUser> GetUserByEmailAsync(string email);

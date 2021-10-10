@@ -24,7 +24,7 @@ namespace API.Extensions.Di
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 3;
+                options.Password.RequiredLength = 4;
             });
 
             var key = Encoding.ASCII.GetBytes(config.GetSection("JwtConfig").GetSection("Secret").Value);

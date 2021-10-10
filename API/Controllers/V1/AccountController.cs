@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using MEDIATOR.Account.Commands.DeleteUser;
+using MEDIATOR.Account.Commands.RegisterUser;
 using MEDIATOR.Account.Queries.GetUserDetails;
 using MEDIATOR.Account.Queries.GetUsersList;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +28,22 @@ namespace API.Controllers.V1
             var vm = await Mediator.Send(new GetUserDetailsQuery { Email = email});
             return Ok(vm);
         }
-        
-        
+
+
+        [HttpDelete("{email}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUser(string email)
+        {
+            await Mediator.Send(new DeleteUserCommand{Email = email});
+            return NoContent();
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]RegisterUserCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
     }
 }
