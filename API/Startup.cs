@@ -1,5 +1,6 @@
 using API.Extensions.Di;
 using API.Extensions.Swagger;
+using API.Middlewares.ExceptionHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -46,9 +47,10 @@ namespace API
             IApiVersionDescriptionProvider descProvider)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+            
+
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             app.UseSwaggerDocumentation(descProvider);
 

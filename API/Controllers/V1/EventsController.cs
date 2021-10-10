@@ -1,3 +1,4 @@
+using CORE.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,6 +13,7 @@ namespace API.Controllers.V1
            Description = "description")]
         public IActionResult Test()
         {
+            throw new IdentifierMismatchException("test test");
             return Ok();
         }
     }
