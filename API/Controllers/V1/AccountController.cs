@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
 using MEDIATOR.Account.Commands.DeleteUser;
+using MEDIATOR.Account.Commands.PartialUpdateUser;
 using MEDIATOR.Account.Commands.RegisterUser;
 using MEDIATOR.Account.Commands.SignInUser;
 using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
+using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsById;
 using MEDIATOR.Account.Queries.GetUsersList;
 using MEDIATOR.Common.Models;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +16,6 @@ namespace API.Controllers.V1
     [ApiVersion("1.0")]
     public class AccountController : BaseApiController
     {
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UserDetailsVm>> GetAll()
@@ -27,7 +29,17 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDetailsVm>> GetUserByEmail(string email)
         {
-            var vm = await Mediator.Send(new GetUserDetailsQuery { Email = email});
+            var vm = await Mediator.Send(new GetUserDetailsByEmailQuery { Email = email });
+            return Ok(vm);
+        }
+        
+        
+        [HttpGet("[action]/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDetailsVm>> GetUserById(string id)
+        {
+            var vm = await Mediator.Send(new GetUserDetailsByIdQuery { Id = id });
             return Ok(vm);
         }
 
@@ -37,24 +49,32 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteUser(string email)
         {
-            await Mediator.Send(new DeleteUserCommand{Email = email});
+            await Mediator.Send(new DeleteUserCommand { Email = email });
             return NoContent();
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<AuthResult>> Register([FromBody]RegisterUserCommand command)
+        public async Task<ActionResult<AuthResult>> Register([FromBody] RegisterUserCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
 
+
         [HttpPost("SignIn")]
-        public async Task<ActionResult<AuthResult>> SignIn([FromBody]SignInUserCommand command)
+        public async Task<ActionResult<AuthResult>> SignIn([FromBody] SignInUserCommand command)
         {
             var res = await Mediator.Send(command);
             return Ok(res);
         }
-        
-        
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PartiallyUpdateUser(string id, [FromBody] PartialUpdateUserCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
     }
 }

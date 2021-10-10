@@ -5,24 +5,24 @@ using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Mapster;
 using MediatR;
 
-namespace MEDIATOR.Account.Queries.GetUserDetails
+namespace MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsById
 {
-    public class GetUserDetailsQuery : IRequest<UserDetailsVm>
+    public class GetUserDetailsByIdQuery : IRequest<UserDetailsVm>
     {
-        public string Email { get; set; }
+        public string Id { get; set; }
 
-        public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDetailsVm>
+        public class GetUserDetailsByIdQueryHandler : IRequestHandler<GetUserDetailsByIdQuery,UserDetailsVm>
         {
             private readonly IAccountService _accountService;
 
-            public GetUserDetailsQueryHandler(IAccountService accountService)
+            public GetUserDetailsByIdQueryHandler(IAccountService accountService)
             {
                 _accountService = accountService;
             }
 
-            public async Task<UserDetailsVm> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
+            public async Task<UserDetailsVm> Handle(GetUserDetailsByIdQuery request, CancellationToken cancellationToken)
             {
-                var appUser = await _accountService.GetUserByEmailAsync(request.Email);
+                var appUser = await _accountService.GetUserByIdAsync(request.Id);
                 
                 if (appUser is null)
                     throw new ResourceNotFoundException("User not found");

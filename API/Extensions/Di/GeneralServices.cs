@@ -6,7 +6,9 @@ using INFRASTRUCTURE.Identity.Options;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using INFRASTRUCTURE.Identity.Services.Implementations;
 using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
 using MEDIATOR.Common.Behaviours;
+using MEDIATOR.Common.Mappings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,10 +26,9 @@ namespace API.Extensions.Di
             services.AddDbContext<AppDbContext>(c =>
                 c.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             
-
             services.Configure<JwtConfig>(config.GetSection("JwtConfig"));
 
-            services.AddMediatR(typeof(GetUserDetailsQuery).Assembly);
+            services.AddMediatR(typeof(GeneralMappings).Assembly);
             services.AddScoped<IAccountService, AccountService>();
             services.AddTransient(typeof(IPipelineBehavior<,>),
                 typeof(RequestValidationBehaviour<,>));

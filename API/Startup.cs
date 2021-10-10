@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation.AspNetCore;
 using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
+using MEDIATOR.Common.Models;
 
 
 namespace API
@@ -39,7 +41,7 @@ namespace API
             ).AddNewtonsoftJson()
                 .AddFluentValidation(configuration =>
             {
-                configuration.RegisterValidatorsFromAssemblyContaining<GetUserDetailsQuery>();
+                configuration.RegisterValidatorsFromAssemblyContaining<AuthResult>();
             });
 
             services.AddServices(_config);

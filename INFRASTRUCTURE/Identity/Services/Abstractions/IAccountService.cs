@@ -10,7 +10,10 @@ namespace INFRASTRUCTURE.Identity.Services.Abstractions
         Task<string> CreateAsync(ApplicationUser user, string password,
             CancellationToken cancellationToken = default);
 
+        Task UpdatePartialAsync(ApplicationUser user, (string Name, string LastName, string Email) values);
+
         Task<ApplicationUser> GetUserByEmailAsync(string email);
+        Task<ApplicationUser> GetUserByIdAsync(string id);
         Task<bool> DeleteUserAsync(ApplicationUser user);
         Task<bool> SignInAsync(ApplicationUser user, string password);
         Task<IReadOnlyList<string>> GetRolesForUserAsync(ApplicationUser user);
