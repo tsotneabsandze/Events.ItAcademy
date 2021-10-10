@@ -24,6 +24,7 @@ namespace API.Middlewares.ExceptionHandling
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 await HandleExceptionAsync(ctx, e);
             }
         }

@@ -3,6 +3,7 @@ using INFRASTRUCTURE.Data;
 using INFRASTRUCTURE.Identity;
 using INFRASTRUCTURE.Identity.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,11 +41,26 @@ namespace API.Extensions.Di
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidIssuer = "localhost",
-                        ValidAudience = "localhost"
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        // ValidIssuer = "localhost",
+                        // ValidAudience = "localhost"
                     };
+                }
+            );
+
+            services.AddAuthorization(
+                options =>
+                {
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    
+                    
+                    options.AddPolicy("RequireAdminRole",
+                        policy => policy.RequireRole("Admin"));
+                    options.AddPolicy("RequireBasicRole",
+                        policy => policy.RequireRole("Basic"));
                 }
             );
 

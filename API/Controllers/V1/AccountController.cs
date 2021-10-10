@@ -8,11 +8,13 @@ using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
 using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsById;
 using MEDIATOR.Account.Queries.GetUsersList;
 using MEDIATOR.Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.V1
 {
+    [Authorize]
     [ApiVersion("1.0")]
     public class AccountController : BaseApiController
     {
@@ -45,6 +47,7 @@ namespace API.Controllers.V1
 
 
         [HttpDelete("{email}")]
+        [Authorize(policy:"RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteUser(string email)
@@ -53,6 +56,7 @@ namespace API.Controllers.V1
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult<AuthResult>> Register([FromBody] RegisterUserCommand command)
         {
@@ -61,6 +65,7 @@ namespace API.Controllers.V1
         }
 
 
+        [AllowAnonymous]
         [HttpPost("SignIn")]
         public async Task<ActionResult<AuthResult>> SignIn([FromBody] SignInUserCommand command)
         {
@@ -68,7 +73,9 @@ namespace API.Controllers.V1
             return Ok(res);
         }
 
+        
         [HttpPut("{id}")]
+        [Authorize(policy:"RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PartiallyUpdateUser(string id, [FromBody] PartialUpdateUserCommand command)

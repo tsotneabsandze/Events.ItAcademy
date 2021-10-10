@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using INFRASTRUCTURE.Identity.Options;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
 using INFRASTRUCTURE.Identity.Services.Implementations;
-using MEDIATOR.Account.Queries.GetUserDetails;
-using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
 using MEDIATOR.Common.Behaviours;
 using MEDIATOR.Common.Mappings;
 using Microsoft.Extensions.Configuration;
