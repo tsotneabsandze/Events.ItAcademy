@@ -3,6 +3,7 @@ using MEDIATOR.Common.Models;
 using MEDIATOR.Events.Commands.ApproveEvent;
 using MEDIATOR.Events.Commands.CreateEvent;
 using MEDIATOR.Events.Commands.DeleteEvent;
+using MEDIATOR.Events.Commands.UpdateEvent;
 using MEDIATOR.Events.Queries.GetEventDetail;
 using MEDIATOR.Events.Queries.GetEventsList;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +63,17 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ApproveEvent([FromBody] ApproveEventCommand cmd)
+        {
+            await Mediator.Send(cmd);
+            return NoContent();
+        }
+        
+        [HttpPut("{id:int}")]
+        [Authorize(Roles = "Basic")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> UpdateEvent( int id,[FromBody] UpdateEventCommand cmd)
         {
             await Mediator.Send(cmd);
             return NoContent();

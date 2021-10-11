@@ -64,6 +64,24 @@ namespace API.Middlewares.ExceptionHandling
             Title = ex.Message;
             LogLevel = LogLevel.Information;
         }
+
+        private void BindException(InvalidDateException ex)
+        {
+            Name = HttpStatusCode.BadRequest.ToString();
+            Status = (int) HttpStatusCode.BadRequest;
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+            Title = ex.Message;
+            LogLevel = LogLevel.Information;
+        }
+
+        private void BindException(ResourceCanNotBeEditedException ex)
+        {
+            Name = HttpStatusCode.BadRequest.ToString();
+            Status = (int) HttpStatusCode.BadRequest;
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+            Title = ex.Message;
+            LogLevel = LogLevel.Information;
+        }
         
         private void BindException(Exception exception)
         {
