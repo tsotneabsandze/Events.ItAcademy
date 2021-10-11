@@ -2,6 +2,8 @@ using System.Text;
 using INFRASTRUCTURE.Data;
 using INFRASTRUCTURE.Identity;
 using INFRASTRUCTURE.Identity.Models;
+using INFRASTRUCTURE.Identity.Services.Abstractions;
+using INFRASTRUCTURE.Identity.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -63,6 +65,9 @@ namespace API.Extensions.Di
                         policy => policy.RequireRole("Basic"));
                 }
             );
+            
+            services.AddHttpContextAccessor();
+            services.AddTransient<IUserService, UserService>();
 
             return services;
         }

@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 
-
 namespace API.Extensions.Di
 {
     public static class GeneralServices
@@ -19,11 +18,11 @@ namespace API.Extensions.Di
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericEfRepository<>));
-            services.AddScoped<ITokenService,TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddDbContext<AppDbContext>(c =>
                 c.UseSqlServer(config.GetConnectionString("DefaultConnection")));
-            
+
             services.Configure<JwtConfig>(config.GetSection("JwtConfig"));
 
             services.AddMediatR(typeof(GeneralMappings).Assembly);

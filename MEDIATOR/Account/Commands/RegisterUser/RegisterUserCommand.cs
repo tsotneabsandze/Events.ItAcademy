@@ -45,7 +45,7 @@ namespace MEDIATOR.Account.Commands.RegisterUser
 
                 response.Email = request.Email;
                 response.Result = true;
-                response.Token = await _tokenService.CreateTokeAsync(request.Email);
+                response.Token = await _tokenService.CreateTokeAsync(user);
 
                 return response;
             }

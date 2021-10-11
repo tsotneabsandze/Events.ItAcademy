@@ -1,19 +1,26 @@
-using CORE.Exceptions;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using MEDIATOR.Events.Commands.CreateEvent;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers.V1
 {
     [ApiVersion("1.0")]
     public class EventsController : BaseApiController
     {
-        [HttpGet]
-        [SwaggerOperation(
-           Summary = "test",
-           Description = "description")]
-        public IActionResult Test()
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Create([FromBody]CreateEventCommand command)
         {
-            return Ok();
+            await Mediator.Send(command);
+            return NoContent();
         }
+
+        
     }
 }

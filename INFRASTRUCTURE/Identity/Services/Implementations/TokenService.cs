@@ -25,16 +25,16 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
             _userManager = userManager;
         }
 
-        public async Task<string> CreateTokeAsync(string mail)
+        public async Task<string> CreateTokeAsync(ApplicationUser user)
         {
             var handler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_options.Value.Secret);
-            var user = await _userManager.FindByEmailAsync(mail);
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, mail)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("id",user.Id)
             };
 
             claims.AddRange(roles.Select(role =>
