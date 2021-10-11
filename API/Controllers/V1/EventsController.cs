@@ -8,6 +8,7 @@ using MEDIATOR.Events.Queries.GetEventDetail;
 using MEDIATOR.Events.Queries.GetEventsList;
 using MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList;
 using MEDIATOR.Events.Queries.GetEventsList.GetApprovedEvents;
+using MEDIATOR.Events.Queries.GetEventsList.GetSpecificUserEvents;
 using MEDIATOR.Events.Queries.GetEventsList.GetUnapprovedEvents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,16 @@ namespace API.Controllers.V1
         {
             var vm = await Mediator.Send(new GetUnapprovedEventsQuery());
             return Ok(vm);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<EventsListVm>> GetEventsByUser(string id)
+        {
+            var vm = await Mediator.Send(new GetSpecificUserEventsQuery { Id = id });
+            return vm;
         }
 
         [AllowAnonymous]
