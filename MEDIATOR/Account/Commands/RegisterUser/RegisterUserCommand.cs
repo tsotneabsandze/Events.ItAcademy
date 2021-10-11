@@ -38,8 +38,10 @@ namespace MEDIATOR.Account.Commands.RegisterUser
                 var id = await _accountService.CreateAsync(user, request.Password, cancellationToken);
 
 
-                var response = new AuthResult();
-                request.Email = request.Email;
+                var response = new AuthResult
+                {
+                    Email = request.Email
+                };
 
                 if (string.IsNullOrEmpty(id)) return response;
 

@@ -33,8 +33,10 @@ namespace MEDIATOR.Account.Commands.SignInUser
                 var result = await _accountService.SignInAsync(user,request.Password);
                 
                 
-                var response = new AuthResult();
-                request.Email = request.Email;
+                var response = new AuthResult
+                {
+                    Email = request.Email
+                };
 
                 if (!result)
                     return response;

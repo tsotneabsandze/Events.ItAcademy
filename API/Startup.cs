@@ -10,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation.AspNetCore;
-using MEDIATOR.Account.Queries.GetUserDetails;
-using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsByEmail;
 using MEDIATOR.Common.Models;
 
 

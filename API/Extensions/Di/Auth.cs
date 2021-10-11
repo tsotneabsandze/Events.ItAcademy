@@ -54,7 +54,8 @@ namespace API.Extensions.Di
             services.AddAuthorization(
                 options =>
                 {
-                    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder(
+                            JwtBearerDefaults.AuthenticationScheme)
                         .RequireAuthenticatedUser()
                         .Build();
                     

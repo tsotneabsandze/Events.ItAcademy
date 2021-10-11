@@ -50,6 +50,7 @@ namespace API.Controllers.V1
         [Authorize(policy:"RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteUser(string email)
         {
             await Mediator.Send(new DeleteUserCommand { Email = email });
@@ -75,9 +76,10 @@ namespace API.Controllers.V1
 
         
         [HttpPut("{id}")]
-        [Authorize(policy:"RequireAdminRole")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> PartiallyUpdateUser(string id, [FromBody] PartialUpdateUserCommand command)
         {
             await Mediator.Send(command);
