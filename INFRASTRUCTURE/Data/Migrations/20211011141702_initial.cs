@@ -26,6 +26,8 @@ namespace INFRASTRUCTURE.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -162,6 +164,8 @@ namespace INFRASTRUCTURE.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     CanBeEditedTill = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Starts = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    Ends = table.Column<DateTime>(type: "smalldatetime", nullable: false),
                     Photo = table.Column<byte[]>(type: "varbinary(MAX)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -216,6 +220,12 @@ namespace INFRASTRUCTURE.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_Title",
+                table: "Events",
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_UserId",

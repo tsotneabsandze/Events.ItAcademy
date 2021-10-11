@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MEDIATOR.Common.Models;
+using MEDIATOR.Events.Commands.ApproveEvent;
 using MEDIATOR.Events.Commands.CreateEvent;
 using MEDIATOR.Events.Commands.DeleteEvent;
 using MEDIATOR.Events.Queries.GetEventDetail;
@@ -22,7 +23,7 @@ namespace API.Controllers.V1
             var vm = await Mediator.Send(new GetEventsListQuery());
             return Ok(vm);
         }
-        
+
         [AllowAnonymous]
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -33,9 +34,7 @@ namespace API.Controllers.V1
 
             return Ok(vm);
         }
-        
-        
-        
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -44,8 +43,8 @@ namespace API.Controllers.V1
             await Mediator.Send(command);
             return NoContent();
         }
-        
-        
+
+
         [HttpDelete("{id:int}")]
         [Authorize("RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -54,6 +53,17 @@ namespace API.Controllers.V1
         public async Task<IActionResult> Delete(int id)
         {
             await Mediator.Send(new DeleteEventCommand { Id = id });
+            return NoContent();
+        }
+
+        [HttpPut]
+        [Authorize("RequireAdminRole")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> ApproveEvent([FromBody] ApproveEventCommand cmd)
+        {
+            await Mediator.Send(cmd);
             return NoContent();
         }
     }

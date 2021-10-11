@@ -36,6 +36,9 @@ namespace INFRASTRUCTURE.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime>("Ends")
+                        .HasColumnType("smalldatetime");
+
                     b.Property<bool>("IsApproved")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -47,6 +50,9 @@ namespace INFRASTRUCTURE.Data.Migrations
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(MAX)");
 
+                    b.Property<DateTime>("Starts")
+                        .HasColumnType("smalldatetime");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -57,6 +63,9 @@ namespace INFRASTRUCTURE.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

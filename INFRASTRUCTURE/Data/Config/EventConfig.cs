@@ -9,6 +9,8 @@ namespace INFRASTRUCTURE.Data.Config
     {
         public void Configure(EntityTypeBuilder<Event> builder)
         {
+            builder.HasIndex(x => x.Title).IsUnique();
+            
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Title)
@@ -28,6 +30,13 @@ namespace INFRASTRUCTURE.Data.Config
             builder.Property(x => x.UserId)
                 .IsRequired();
 
+            builder.Property(x => x.Starts)
+                .HasColumnType("smalldatetime")
+                .IsRequired();
+
+            builder.Property(x => x.Ends)
+                .HasColumnType("smalldatetime")
+                .IsRequired();
         }
     }
 }
