@@ -68,6 +68,7 @@ namespace API.Controllers.V1
 
         [AllowAnonymous]
         [HttpPost("SignIn")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<AuthResult>> SignIn([FromBody] SignInUserCommand command)
         {
             var res = await Mediator.Send(command);

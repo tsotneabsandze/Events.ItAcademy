@@ -1,7 +1,8 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Exceptions;
-using INFRASTRUCTURE.Identity.Services.Abstractions;
+using MEDIATOR.Common.Abstractions;
 using MediatR;
 
 namespace MEDIATOR.Account.Commands.PartialUpdateUser
@@ -13,24 +14,21 @@ namespace MEDIATOR.Account.Commands.PartialUpdateUser
         public string Name { get; set; }
         public string LastName { get; set; }
 
-        public class PartialUpdateUserCommandHandler : IRequestHandler<PartialUpdateUserCommand>
+        public class PartialUpdateUserCommandHandler : BaseRequestHandler<PartialUpdateUserCommand,Unit>
         {
-            private readonly IAccountService _accountService;
-
-            public PartialUpdateUserCommandHandler(IAccountService accountService)
+            public PartialUpdateUserCommandHandler(IServiceProvider service) : base(service)
             {
-                _accountService = accountService;
             }
 
-            public async Task<Unit> Handle(PartialUpdateUserCommand request, CancellationToken cancellationToken)
+            public override async Task<Unit> Handle(PartialUpdateUserCommand request, CancellationToken cancellationToken)
             {
-                var user = await _accountService.GetUserByIdAsync(request.Id);
-
+                var user = await AccountService.GetUserByIdAsync(request.Id);
+                
                 if (user is null)
                     throw new ResourceNotFoundException($"user with id {request.Id} was not found");
-
-                await _accountService.UpdatePartialAsync(user, (request.Name, request.LastName, request.Email));
-
+                
+                await AccountService.UpdatePartialAsync(user, (request.Name, request.LastName, request.Email));
+                
                 return Unit.Value;
             }
         }

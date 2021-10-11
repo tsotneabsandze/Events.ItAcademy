@@ -3,10 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Entities;
-using CORE.Interfaces;
-using INFRASTRUCTURE.Identity.Services.Abstractions;
 using Mapster;
-using MEDIATOR.Account.Queries.GetUserDetails;
+using MEDIATOR.Common.Abstractions;
 using MediatR;
 
 namespace MEDIATOR.Events.Commands.CreateEvent
@@ -19,23 +17,19 @@ namespace MEDIATOR.Events.Commands.CreateEvent
         public DateTime? CanBeEditedTill { get; set; }
         public byte[] Photo { get; set; }
 
-        public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand>
+        
+        public class CreateEventCommandHandler : BaseRequestHandler<CreateEventCommand,Unit>
         {
-            private readonly IGenericRepository<Event> _repository;
-            private readonly IUserService _userService;
-
-            public CreateEventCommandHandler(IGenericRepository<Event> repository, IUserService userService)
+            public CreateEventCommandHandler(IServiceProvider service) : base(service)
             {
-                _repository = repository;
-                _userService = userService;
             }
 
-            public async Task<Unit> Handle(CreateEventCommand request, CancellationToken cancellationToken)
+            public override async Task<Unit> Handle(CreateEventCommand request, CancellationToken cancellationToken)
             {
                 var entity = request.Adapt<Event>();
-                entity.UserId = _userService.GetUser().Claims.First(x=>x.Type=="id").Value;
-                await _repository.InsertAsync(entity, cancellationToken);
-
+                entity.UserId = UserService.GetUser().Claims.First(x=>x.Type=="id").Value;
+                await EventRepo.InsertAsync(entity, cancellationToken);
+                
                 return Unit.Value;
             }
         }

@@ -1,33 +1,33 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Entities;
 using CORE.Exceptions;
 using CORE.Interfaces;
+using MEDIATOR.Common.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Antiforgery.Internal;
 
 namespace MEDIATOR.Events.Commands.DeleteEvent
 {
     public class DeleteEventCommand : IRequest
     {
         public int Id { get; set; }
-
-        public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand>
+        
+        public class DeleteEventCommandHandler:BaseRequestHandler<DeleteEventCommand,Unit>
         {
-            private readonly IGenericRepository<Event> _repository;
-
-            public DeleteEventCommandHandler(IGenericRepository<Event> repository)
+            public DeleteEventCommandHandler(IServiceProvider service) : base(service)
             {
-                _repository = repository;
             }
 
-            public  async Task<Unit> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
+            public override async Task<Unit> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _repository.GetByIdAsync(request.Id, cancellationToken);
-
+                var entity = await EventRepo.GetByIdAsync(request.Id, cancellationToken);
+                
                 if (entity is null)
                     throw new ResourceNotFoundException($"event with id {request.Id} was not found");
-
-                await _repository.DeleteAsync(entity, cancellationToken: cancellationToken);
+                
+                await EventRepo.DeleteAsync(entity, cancellationToken: cancellationToken);
                 
                 return Unit.Value;
             }

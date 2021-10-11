@@ -1,7 +1,9 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using INFRASTRUCTURE.Identity.Models;
 using INFRASTRUCTURE.Identity.Services.Abstractions;
+using MEDIATOR.Common.Abstractions;
 using MEDIATOR.Common.Models;
 using MediatR;
 
@@ -14,18 +16,13 @@ namespace MEDIATOR.Account.Commands.RegisterUser
         public string Name { get; set; }
         public string LastName { get; set; }
 
-        public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, AuthResult>
+        public class RegisterUserCommandHandler : BaseRequestHandler<RegisterUserCommand, AuthResult>
         {
-            private readonly IAccountService _accountService;
-            private readonly ITokenService _tokenService;
-
-            public RegisterUserCommandHandler(IAccountService accountService, ITokenService tokenService)
+            public RegisterUserCommandHandler(IServiceProvider service) : base(service)
             {
-                _accountService = accountService;
-                _tokenService = tokenService;
             }
 
-            public async Task<AuthResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+            public override async Task<AuthResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
                 var user = new ApplicationUser
                 {
@@ -34,23 +31,24 @@ namespace MEDIATOR.Account.Commands.RegisterUser
                     Name = request.Name,
                     LastName = request.LastName
                 };
-
-                var id = await _accountService.CreateAsync(user, request.Password, cancellationToken);
-
-
+                
+                var id = await AccountService.CreateAsync(user, request.Password, cancellationToken);
+                
+                
                 var response = new AuthResult
                 {
                     Email = request.Email
                 };
-
+                
                 if (string.IsNullOrEmpty(id)) return response;
-
+                
                 response.Email = request.Email;
                 response.Result = true;
-                response.Token = await _tokenService.CreateTokeAsync(user);
-
+                response.Token = await TokenService.CreateTokeAsync(user);
+                
                 return response;
             }
         }
+        
     }
 }
