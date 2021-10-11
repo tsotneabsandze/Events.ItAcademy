@@ -7,7 +7,7 @@ using MEDIATOR.Common.Abstractions;
 using MEDIATOR.Common.Models;
 using MediatR;
 
-namespace MEDIATOR.Events.Queries.GetEventsList
+namespace MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList
 {
     public class GetEventsListQuery : IRequest<EventsListVm>
     {

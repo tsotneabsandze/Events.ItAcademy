@@ -1,4 +1,5 @@
 using System.Text;
+using CORE.Interfaces;
 using INFRASTRUCTURE.Data;
 using INFRASTRUCTURE.Identity;
 using INFRASTRUCTURE.Identity.Models;

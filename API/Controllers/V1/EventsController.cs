@@ -6,6 +6,9 @@ using MEDIATOR.Events.Commands.DeleteEvent;
 using MEDIATOR.Events.Commands.UpdateEvent;
 using MEDIATOR.Events.Queries.GetEventDetail;
 using MEDIATOR.Events.Queries.GetEventsList;
+using MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList;
+using MEDIATOR.Events.Queries.GetEventsList.GetApprovedEvents;
+using MEDIATOR.Events.Queries.GetEventsList.GetUnapprovedEvents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +25,24 @@ namespace API.Controllers.V1
         public async Task<ActionResult<EventsListVm>> GetAll()
         {
             var vm = await Mediator.Send(new GetEventsListQuery());
+            return Ok(vm);
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<EventsListVm>> GetApprovedEvents()
+        {
+            var vm = await Mediator.Send(new GetApprovedEventsQuery());
+            return Ok(vm);
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<EventsListVm>> GetUnapprovedEvents()
+        {
+            var vm = await Mediator.Send(new GetUnapprovedEventsQuery());
             return Ok(vm);
         }
 
@@ -67,13 +88,13 @@ namespace API.Controllers.V1
             await Mediator.Send(cmd);
             return NoContent();
         }
-        
+
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Basic")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> UpdateEvent( int id,[FromBody] UpdateEventCommand cmd)
+        public async Task<IActionResult> UpdateEvent(int id, [FromBody] UpdateEventCommand cmd)
         {
             await Mediator.Send(cmd);
             return NoContent();

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace INFRASTRUCTURE.Identity.Services.Abstractions
+namespace CORE.Interfaces
 {
     public interface IUserService
     {
