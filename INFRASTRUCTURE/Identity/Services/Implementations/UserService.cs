@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using INFRASTRUCTURE.Identity.Services.Abstractions;
+using CORE.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace INFRASTRUCTURE.Identity.Services.Implementations

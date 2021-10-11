@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Entities;
 using CORE.Interfaces;
+using CORE.Specifications;
+using INFRASTRUCTURE.Identity.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace INFRASTRUCTURE.Data
@@ -43,6 +46,22 @@ namespace INFRASTRUCTURE.Data
         {
             Ctx.Set<T>().Remove(entity);
             await Ctx.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<T> GetItemWithSpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<T>> ListBySpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec).ToListAsync(cancellationToken: cancellationToken);
+        }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            IQueryable<T> baseQuery = Ctx.Set<T>();
+            return SpecificationEvaluator<T>.GetQuery(baseQuery, spec);
         }
     }
 }
