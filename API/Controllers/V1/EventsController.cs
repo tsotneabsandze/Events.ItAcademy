@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
-using CORE.Entities;
+using MEDIATOR.Common.Models;
 using MEDIATOR.Events.Commands.CreateEvent;
 using MEDIATOR.Events.Commands.DeleteEvent;
+using MEDIATOR.Events.Queries.GetEventDetail;
 using MEDIATOR.Events.Queries.GetEventsList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,16 @@ namespace API.Controllers.V1
             return Ok(vm);
         }
         
+        [AllowAnonymous]
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<EventDto>> Get(int id)
+        {
+            var vm = await Mediator.Send(new GetEventDetailQuery { Id = id });
+
+            return Ok(vm);
+        }
         
         
         
