@@ -28,6 +28,8 @@ namespace ADMINPANEL
             services.AddControllersWithViews()
                 .AddFluentValidation(c =>
                     { c.RegisterValidatorsFromAssemblyContaining(typeof(LoginVm)); });
+            services.AddSession();
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,7 +48,7 @@ namespace ADMINPANEL
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

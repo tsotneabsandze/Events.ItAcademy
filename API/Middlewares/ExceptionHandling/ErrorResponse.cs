@@ -20,7 +20,6 @@ namespace API.Middlewares.ExceptionHandling
                     return (string)traceId;
 
                 return default;
-                
             }
             set => Extensions["TraceId"] = value;
         }
@@ -34,32 +33,32 @@ namespace API.Middlewares.ExceptionHandling
             Title = exception.Message;
             LogLevel = LogLevel.Error;
             Instance = ctx.Request.Path;
-            
+
             BindException((dynamic)exception);
-            
         }
 
         private void BindException(ResourceNotFoundException ex)
         {
             Name = HttpStatusCode.NotFound.ToString();
-            Status = (int) HttpStatusCode.NotFound;
+            Status = (int)HttpStatusCode.NotFound;
             Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4";
             Title = ex.Message;
             LogLevel = LogLevel.Information;
         }
+
         private void BindException(IdentifierMismatchException ex)
         {
             Name = HttpStatusCode.BadRequest.ToString();
-            Status = (int) HttpStatusCode.BadRequest;
+            Status = (int)HttpStatusCode.BadRequest;
             Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
             Title = ex.Message;
             LogLevel = LogLevel.Information;
         }
-        
+
         private void BindException(UnauthorizedException ex)
         {
             Name = HttpStatusCode.Unauthorized.ToString();
-            Status = (int) HttpStatusCode.Unauthorized;
+            Status = (int)HttpStatusCode.Unauthorized;
             Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1";
             Title = ex.Message;
             LogLevel = LogLevel.Information;
@@ -68,7 +67,7 @@ namespace API.Middlewares.ExceptionHandling
         private void BindException(InvalidDateException ex)
         {
             Name = HttpStatusCode.BadRequest.ToString();
-            Status = (int) HttpStatusCode.BadRequest;
+            Status = (int)HttpStatusCode.BadRequest;
             Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
             Title = ex.Message;
             LogLevel = LogLevel.Information;
@@ -77,20 +76,27 @@ namespace API.Middlewares.ExceptionHandling
         private void BindException(ResourceCanNotBeEditedException ex)
         {
             Name = HttpStatusCode.BadRequest.ToString();
-            Status = (int) HttpStatusCode.BadRequest;
+            Status = (int)HttpStatusCode.BadRequest;
             Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
             Title = ex.Message;
             LogLevel = LogLevel.Information;
         }
-        
+
+        private void BindException(InvalidCrudOperationException ex)
+        {
+            Name = HttpStatusCode.BadRequest.ToString();
+            Status = (int)HttpStatusCode.BadRequest;
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+            Title = ex.Message;
+            LogLevel = LogLevel.Information;
+        }
+
         private void BindException(Exception exception)
         {
         }
 
-        
+
         public override string ToString()
             => JsonConvert.SerializeObject(this);
     }
-    
-    
 }

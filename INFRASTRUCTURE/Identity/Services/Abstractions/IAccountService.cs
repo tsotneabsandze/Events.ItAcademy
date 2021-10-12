@@ -18,5 +18,6 @@ namespace INFRASTRUCTURE.Identity.Services.Abstractions
         Task<bool> SignInAsync(ApplicationUser user, string password);
         Task<IReadOnlyList<string>> GetRolesForUserAsync(ApplicationUser user);
         Task<IReadOnlyList<ApplicationUser>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<bool> IsInRole(ApplicationUser user,string role);
     }
 }

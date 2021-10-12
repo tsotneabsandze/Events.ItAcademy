@@ -1,10 +1,12 @@
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+}
 <ul class="navbar-nav">
-    @if (1<0)
+    @if (token != null)
     {
-       // User.Identity.IsAuthenticated
-        
         <li class="nav-item">
-            <form class="form-inline" method="post" asp-controller="Account" asp-action="">
+            <form class="form-inline" method="get" asp-controller="Account" asp-action="Logout">
                 <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
             </form>
         </li>

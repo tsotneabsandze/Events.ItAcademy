@@ -1,0 +1,27 @@
+@model Common.Models.User.UserVm
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+
+<div class="row justify-content-center m-3">
+    <div class="card" style="width: 25rem;">
+        <div class="card-header text-capitalize text-center">
+            <h4>@Model.Name @Model.LastName</h4>
+        </div>
+        <div class="card-body text-center">
+            <h3 class="card-title">about</h3>
+            <h5>Id : @Model.Id</h5>
+            <h5>Personal Id : @Model.Email</h5>
+            
+
+            <a asp-controller="Users" asp-action="ListUsers" class="btn btn-primary">Back</a>
+
+            <form asp-action="Delete" asp-route-email="@Model.Email">
+                <input type="submit" value="Delete" class="btn btn-danger"/>
+            </form>
+        </div>
+    </div>
+</div>

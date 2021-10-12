@@ -24,6 +24,10 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
         public async Task<IReadOnlyList<ApplicationUser>> GetAllAsync(CancellationToken cancellationToken = default)
             => await _userManager.Users.ToListAsync(cancellationToken);
 
+        public async Task<bool> IsInRole(ApplicationUser user, string role)
+            => await _userManager.IsInRoleAsync(user, role);
+
+
         public async Task UpdatePartialAsync(ApplicationUser user, (string Name, string LastName, string Email) values)
         {
             var (name, lastName, email) = values;
@@ -33,7 +37,6 @@ namespace INFRASTRUCTURE.Identity.Services.Implementations
             user.UserName = email;
 
             await _userManager.UpdateAsync(user);
-
         }
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)

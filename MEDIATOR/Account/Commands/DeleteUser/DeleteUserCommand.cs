@@ -21,6 +21,9 @@ namespace MEDIATOR.Account.Commands.DeleteUser
             public override async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await AccountService.GetUserByEmailAsync(request.Email);
+
+                if (await AccountService.IsInRole(user, "Admin"))
+                    throw new InvalidCrudOperationException("Admin can not be deleted");
                 
                 if (user is null)
                     throw new ResourceNotFoundException("user not found");
