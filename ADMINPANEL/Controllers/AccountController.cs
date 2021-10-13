@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using Common.Constants;
 using Common.Models;
 using Common.Models.Login;
-using Common.Models.Register;
-using Microsoft.AspNetCore.Http;
+using Common.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,6 +12,16 @@ namespace ADMINPANEL.Controllers
 {
     public class AccountController : Controller
     {
+        
+        private static  HttpClient _client;
+        private readonly ISessionService _sessionService;
+
+        public AccountController(ISessionService sessionService)
+        {
+            _sessionService = sessionService;
+            _client = new HttpClient();
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -26,10 +35,9 @@ namespace ADMINPANEL.Controllers
 
             var stringContent = new StringContent(JsonConvert.SerializeObject(vm),
                 Encoding.UTF8, ApiConstants.ContentType);
+            
 
-            var client = new HttpClient();
-
-            var response = await client
+            var response = await _client
                 .PostAsync($"{ApiConstants.BaseApiUrl}/Account/signIn",
                     stringContent);
 
@@ -40,8 +48,8 @@ namespace ADMINPANEL.Controllers
                 var data =
                     JsonConvert.DeserializeObject<AuthResponse>(content);
 
-                HttpContext.Session.SetString("token", data.Token);
-                HttpContext.Session.SetString("mail", data.Email);
+                _sessionService.SetToken(data.Token);
+                _sessionService.SetMail(data.Email);
 
                 return RedirectToAction("Index", "Home");
             }
