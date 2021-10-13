@@ -1,0 +1,83 @@
+@model Common.Models.EventList.EventListVm
+
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-controller="Events" class="btn btn-primary" asp-action="ApprovedEvents">Approved events</a>
+
+<a asp-controller="Events" class="btn btn-primary" asp-action="UnapprovedEvents">Unapproved Events</a>
+
+@if (Model.Events.Any())
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+
+                <table class="table table-image">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col">Id</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Approved</th>
+
+                        <th scope="col">Details</th>
+                        @if ((string)@ViewData["Title"] == "Unapproved Event List")
+                        {
+                            <th scope="col">Approve</th>
+                        }
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var eventVm in Model.Events)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                @eventVm.Id
+                            </td>
+                            <td>
+                                @eventVm.Title
+                            </td>
+                            <td>
+                                @eventVm.IsApproved
+                            </td>
+                            <td>
+                                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventVm.Id" class="btn btn-primary">Details</a>
+                            </td>
+                            @if ((string)@ViewData["Title"] == "Unapproved Event List")
+                            {
+                                <td>
+                                    <a asp-controller="Events"  asp-action="Approve" asp-route-id="@eventVm.Id" 
+                                       class="btn btn-primary">Approve</a>
+                                </td>
+                            }
+                            <td>
+                                <form asp-controller="Events" asp-action="Delete" asp-route-id="@eventVm.Id" method="get">
+                                    <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are your sure you want to delete [@eventVm.Title]' )">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <br/>
+}
+else
+{
+    <div class=" mt-1 mb-1">
+
+        <hr/>
+        <h5 class="text-center">
+            Nothing to Show at the moment
+        </h5>
+    </div>
+}

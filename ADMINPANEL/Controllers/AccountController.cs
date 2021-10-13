@@ -10,18 +10,9 @@ using Newtonsoft.Json;
 
 namespace ADMINPANEL.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         
-        private static  HttpClient _client;
-        private readonly ISessionService _sessionService;
-
-        public AccountController(ISessionService sessionService)
-        {
-            _sessionService = sessionService;
-            _client = new HttpClient();
-        }
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -37,7 +28,7 @@ namespace ADMINPANEL.Controllers
                 Encoding.UTF8, ApiConstants.ContentType);
             
 
-            var response = await _client
+            var response = await Client
                 .PostAsync($"{ApiConstants.BaseApiUrl}/Account/signIn",
                     stringContent);
 
@@ -48,10 +39,10 @@ namespace ADMINPANEL.Controllers
                 var data =
                     JsonConvert.DeserializeObject<AuthResponse>(content);
 
-                _sessionService.SetToken(data.Token);
-                _sessionService.SetMail(data.Email);
+                SessionService.SetToken(data.Token);
+                SessionService.SetMail(data.Email);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Events");
             }
 
             ModelState.AddModelError(string.Empty, "invalid login attempt");

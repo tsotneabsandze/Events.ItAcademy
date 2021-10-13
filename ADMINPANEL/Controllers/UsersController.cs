@@ -7,59 +7,48 @@ using Common.Constants;
 using Common.Models.Register;
 using Common.Models.User;
 using Common.Models.UserList;
-using Common.Services.Abstractions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ADMINPANEL.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
-        private static HttpClient _client;
-        private readonly ISessionService _sessionService;
-
-        public UsersController(ISessionService sessionService)
-        {
-            _sessionService = sessionService;
-            _client = new HttpClient();
-        }
 
         [HttpGet]
-        public async Task<IActionResult> ListUsers()
+        public async Task<IActionResult> Index()
         {
-            var token = _sessionService.GetToken();
+            var token = SessionService.GetToken();
             if (token is null)
                 return RedirectToAction("Login", "Account");
 
-           
-
-            _client.DefaultRequestHeaders.Authorization =
+            
+            Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
             var response =
-                await _client.GetAsync($"{ApiConstants.BaseApiUrl}/Account");
+                await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Account");
 
 
             var dataString = await response.Content.ReadAsStringAsync();
             var users =
                 JsonConvert.DeserializeObject<UserListVm>(dataString);
 
-            return View(users);
+            return View("ListUsers",users);
         }
 
         [HttpGet]
         public async Task<IActionResult> DeleteUser(string email)
         {
-            var token = _sessionService.GetToken();
+            var token = SessionService.GetToken();
             if (token is null)
                 return RedirectToAction("Login", "Account");
 
             
-            _client.DefaultRequestHeaders.Authorization =
+            Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
-            var response = await _client.GetAsync($"{ApiConstants.BaseApiUrl}/Account/{email}");
+            var response = await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Account/{email}");
             if (!response.IsSuccessStatusCode) return View("NotFound", email);
 
             var stringContent = await response.Content.ReadAsStringAsync();
@@ -71,27 +60,27 @@ namespace ADMINPANEL.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string email)
         {
-            var token = _sessionService.GetToken();
+            var token = SessionService.GetToken();
             
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConstants.Scheme, token);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
-            await _client.DeleteAsync(
+            await Client.DeleteAsync(
                 $"{ApiConstants.BaseApiUrl}/Account/{email}");
 
-            return RedirectToAction(nameof(ListUsers));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
-            var token = _sessionService.GetToken();
+            var token = SessionService.GetToken();
             if (token is null)
                 return RedirectToAction("Login", "Account");
             
-            _client.DefaultRequestHeaders.Authorization =
+            Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
-            var response = await _client.GetAsync($"{ApiConstants.BaseApiUrl}/Account/GetUserById/{id}");
+            var response = await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Account/GetUserById/{id}");
             if (!response.IsSuccessStatusCode) return View("NotFound", id);
 
             var stringContent = await response.Content.ReadAsStringAsync();
@@ -113,16 +102,16 @@ namespace ADMINPANEL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var token = _sessionService.GetToken();
+                var token = SessionService.GetToken();
 
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConstants.Scheme, token);
+                Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(vm),
                     Encoding.UTF8, ApiConstants.ContentType);
 
-                await _client.PutAsync($"{ApiConstants.BaseApiUrl}/Account/{vm.Id}", stringContent);
+                await Client.PutAsync($"{ApiConstants.BaseApiUrl}/Account/{vm.Id}", stringContent);
 
-                return RedirectToAction(nameof(ListUsers));
+                return RedirectToAction(nameof(Index));
             }
 
             ModelState.AddModelError(string.Empty,
@@ -146,12 +135,12 @@ namespace ADMINPANEL.Controllers
                 Encoding.UTF8, ApiConstants.ContentType);
             
 
-            var response = await _client
+            var response = await Client
                 .PostAsync($"{ApiConstants.BaseApiUrl}/Account/Register",
                     stringContent);
 
             if (response.IsSuccessStatusCode)
-                return RedirectToAction(nameof(ListUsers));
+                return RedirectToAction(nameof(Index));
 
             ModelState.AddModelError(string.Empty, "invalid attempt");
             return View(vm);

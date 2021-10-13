@@ -29,10 +29,14 @@ namespace ADMINPANEL
         {
             services.AddControllersWithViews()
                 .AddFluentValidation(c =>
-                    { c.RegisterValidatorsFromAssemblyContaining(typeof(LoginVm)); });
+                {
+                    c.RegisterValidatorsFromAssemblyContaining(typeof(LoginVm));
+                    c.RegisterValidatorsFromAssemblyContaining(typeof(Startup))
+                        ;
+                });
             services.AddSession();
             services.AddHttpContextAccessor();
-            services.AddScoped(typeof(ISessionService),typeof(SessionService));
+            services.AddScoped(typeof(ISessionService), typeof(SessionService));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,7 +62,7 @@ namespace ADMINPANEL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

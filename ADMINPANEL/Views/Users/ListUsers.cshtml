@@ -1,42 +1,11 @@
-
-
-@* *@
-@* @if (Model.Users.Any()) *@
-@* { *@
-@*     <div class="card-columns"> *@
-@*         @foreach (var emp in Model.Users) *@
-@*         { *@
-@*             <div class="card"> *@
-@*                 <div class="card-body text-center"> *@
-@*                     <h5>Id : @emp.Id</h5> *@
-@*                     <h5>Email : @emp.Email </h5> *@
-@*                     <h5>Name : @emp.Name @emp.LastName</h5> *@
-@*                      *@
-@*                     <a asp-controller="home" asp-action="" asp-route-id="@emp.Id" class="btn btn-primary">Edit</a> *@
-@*                     <a asp-controller="home" asp-action="" asp-route-id="@emp.Id" class="btn btn-danger">Delete</a> *@
-@*                 </div> *@
-@* *@
-@*             </div> *@
-@*         } *@
-@*     </div> *@
-@* } *@
-@* else *@
-@* { *@
-@*     <div class=" mt-1 mb-1"> *@
-@*         <hr/> *@
-@*         <h5 class="text-center"> *@
-@*             Nothing to Show here *@
-@*         </h5> *@
-@*     </div> *@
-@* } *@
 @model Common.Models.UserList.UserListVm
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "User List";
 }
 
 <!DOCTYPE html>
-<a asp-controller="Users" asp-action="CreateUser">Add New User</a> 
+<a asp-controller="Users" asp-action="CreateUser">Add New User</a>
 @if (Model.Users.Any())
 {
     <div class="container">
@@ -58,18 +27,17 @@
                     {
                         <tr class="text-center">
                             <td>
-                                <a asp-action="" asp-route-id="@user.Id">
-                                    @user.Id
-                                </a>
+                                @user.Id
+
                             </td>
                             <td>
-                               @user.Email
+                                @user.Email
                             </td>
                             <td>
                                 @user.Name @user.LastName
                             </td>
                             <td>
-                                <a asp-controller="Users" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-primary">Edit</a> 
+                                <a asp-controller="Users" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
                             </td>
                             <td>
                                 <a asp-controller="Users" asp-action="DeleteUser" asp-route-email="@user.Email" class="btn btn-danger">Delete</a>
@@ -79,7 +47,7 @@
 
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
     </div>

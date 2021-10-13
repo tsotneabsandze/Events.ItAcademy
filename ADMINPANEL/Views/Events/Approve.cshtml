@@ -1,0 +1,22 @@
+@model ADMINPANEL.ViewModels.Approval.ApprovalVm
+
+<div class="col-md-4">
+    <p>@ViewBag.Starts - @ViewBag.Ends</p>
+    <form asp-action="Approve" asp-controller="Events" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input hidden asp-for="Id">
+
+        <div class="form-group">
+            <label asp-for="CanBeEditedTill"></label>
+            <input class="form-control" asp-for="CanBeEditedTill" asp-format="{0:yyyy-MM-ddTHH:mm}"/>
+            <span asp-validation-for="CanBeEditedTill" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Approve</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
