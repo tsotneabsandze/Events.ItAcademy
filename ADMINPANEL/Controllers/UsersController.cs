@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ADMINPANEL.ViewModels.EditUser;
+using Common.ActionFilters;
 using Common.Constants;
 using Common.Models.Register;
 using Common.Models.User;
@@ -16,13 +17,11 @@ namespace ADMINPANEL.Controllers
     {
 
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> Index()
         {
             var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
 
-            
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
 
@@ -41,9 +40,7 @@ namespace ADMINPANEL.Controllers
         public async Task<IActionResult> DeleteUser(string email)
         {
             var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
-
+            
             
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
@@ -74,8 +71,7 @@ namespace ADMINPANEL.Controllers
         public async Task<IActionResult> EditUser(string id)
         {
             var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
+            
             
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);

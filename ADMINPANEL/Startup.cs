@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading.Tasks;
+using Common.ActionFilters;
 using Common.Models.Login;
 using Common.Services.Abstractions;
 using Common.Services.Implementations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +32,7 @@ namespace ADMINPANEL
             services.AddSession();
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ISessionService), typeof(SessionService));
+            services.AddScoped<CheckTokenFilter>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

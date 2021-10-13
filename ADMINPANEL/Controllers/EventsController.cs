@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ADMINPANEL.ViewModels.Approval;
+using Common.ActionFilters;
 using Common.Constants;
 using Common.Models.Event;
 using Common.Models.EventList;
@@ -15,12 +16,9 @@ namespace ADMINPANEL.Controllers
     public class EventsController : BaseController
     {
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> Index()
         {
-            var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
-
             var events = await GetEvents();
             @ViewData["Title"] = "Event List";
 
@@ -28,12 +26,9 @@ namespace ADMINPANEL.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> UnapprovedEvents()
         {
-            var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
-
             var events = await GetEvents("GetUnapprovedEvents");
 
             @ViewData["Title"] = "Unapproved Event List";
@@ -41,12 +36,9 @@ namespace ADMINPANEL.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> ApprovedEvents()
         {
-            var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
-
             var events = await GetEvents("GetApprovedEvents");
 
             @ViewData["Title"] = "Approved Event List";
@@ -54,11 +46,11 @@ namespace ADMINPANEL.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> Details(int id)
         {
             var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
+            
 
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(ApiConstants.Scheme, token);
@@ -87,13 +79,9 @@ namespace ADMINPANEL.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> Approve(int id)
         {
-            var token = SessionService.GetToken();
-            if (token is null)
-                return RedirectToAction("Login", "Account");
-            
-
             var response = await Client.GetAsync(
                 $"{ApiConstants.BaseApiUrl}/Events/{id}");
 
@@ -121,7 +109,6 @@ namespace ADMINPANEL.Controllers
                 var stringContent = new StringContent(JsonConvert.SerializeObject(vm), Encoding.UTF8,
                     ApiConstants.ContentType);
 
-                //var response = 
                 await Client.PutAsync($"{ApiConstants.BaseApiUrl}/Events",
                     stringContent);
 
