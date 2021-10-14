@@ -3,14 +3,14 @@ using Common.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ADMINPANEL.Controllers
+namespace EVENTS.MVC.Controllers
 {
     public class BaseController : Controller
     {
         private static  HttpClient _client;
         private  ISessionService _sessionService;
 
-        protected static HttpClient Client =>
+        protected HttpClient Client =>
             _client ??= new HttpClient();
 
         protected ISessionService SessionService
