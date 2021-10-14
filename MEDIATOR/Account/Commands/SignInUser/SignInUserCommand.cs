@@ -37,10 +37,11 @@ namespace MEDIATOR.Account.Commands.SignInUser
                 if (!result)
                     return response;
                 
-                response.Email = request.Email;
                 response.Result = true;
+                response.Email = request.Email;
+                response.Id = user.Id;
                 response.Token = await TokenService.CreateTokeAsync(user);
-                
+
                 return response;
             }
         }

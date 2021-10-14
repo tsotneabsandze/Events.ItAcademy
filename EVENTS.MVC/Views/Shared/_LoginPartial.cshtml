@@ -1,0 +1,23 @@
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+}
+<ul class="navbar-nav">
+    @if (token != null)
+    {
+        <li class="nav-item">
+            <form class="form-inline" method="get" asp-controller="Account" asp-action="Logout">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="LogIn">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+    }
+</ul>

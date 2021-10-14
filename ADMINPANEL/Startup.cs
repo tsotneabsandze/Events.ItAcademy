@@ -1,9 +1,11 @@
+using System.IO;
 using Common.ActionFilters;
 using Common.Models.Login;
 using Common.Services.Abstractions;
 using Common.Services.Implementations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,10 @@ namespace ADMINPANEL
                         ;
                 });
             services.AddSession();
+            
+            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory()
+                + Path.DirectorySeparatorChar + "DataProtection"));
+            
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ISessionService), typeof(SessionService));
             services.AddScoped<CheckTokenFilter>();

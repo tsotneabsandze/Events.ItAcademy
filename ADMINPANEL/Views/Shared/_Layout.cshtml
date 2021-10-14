@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -18,12 +22,15 @@
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <partial name="_LoginPartial"/>
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
-                    </li>
+                    @if (token != null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

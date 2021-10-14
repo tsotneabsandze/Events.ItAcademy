@@ -4,6 +4,9 @@ namespace Common.Services.Abstractions
     {
         void SetToken(string token);
         void SetMail(string email);
+        void SetIdentifier(string id);
         string GetToken();
+        string GetMail();
+        string GetId();
     }
 }
