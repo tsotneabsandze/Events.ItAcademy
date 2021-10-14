@@ -11,6 +11,7 @@ namespace Common.Models.Event
         public DateTime? CanBeEditedTill { get; set; }
         public DateTime Starts { get; set; }
         public DateTime Ends { get; set; }
+        public byte[] Photo { get; set; }
         public string UserId { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Common.ActionFilters;
 using Common.Models.Login;
@@ -7,6 +8,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,10 +33,14 @@ namespace ADMINPANEL
                     c.RegisterValidatorsFromAssemblyContaining(typeof(Startup))
                         ;
                 });
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(4);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
             
-            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory()
-                + Path.DirectorySeparatorChar + "DataProtection"));
+            // services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory()
+            //     + Path.DirectorySeparatorChar + "DataProtection"));
             
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ISessionService), typeof(SessionService));

@@ -9,7 +9,7 @@ using MediatR;
 
 namespace MEDIATOR.Events.Commands.CreateEvent
 {
-    public class CreateEventCommand : IRequest
+    public class CreateEventCommand : IRequest<int>
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -18,19 +18,19 @@ namespace MEDIATOR.Events.Commands.CreateEvent
         public byte[] Photo { get; set; }
 
         
-        public class CreateEventCommandHandler : BaseRequestHandler<CreateEventCommand,Unit>
+        public class CreateEventCommandHandler : BaseRequestHandler<CreateEventCommand,int>
         {
             public CreateEventCommandHandler(IServiceProvider service) : base(service)
             {
             }
 
-            public override async Task<Unit> Handle(CreateEventCommand request, CancellationToken cancellationToken)
+            public override async Task<int> Handle(CreateEventCommand request, CancellationToken cancellationToken)
             {
                 var entity = request.Adapt<Event>();
                 entity.UserId = UserService.GetUser().Claims.First(x=>x.Type=="id").Value;
                 await EventRepo.InsertAsync(entity, cancellationToken);
                 
-                return Unit.Value;
+                return entity.Id;
             }
         }
     }

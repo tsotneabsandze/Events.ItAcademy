@@ -1,7 +1,7 @@
 @model ADMINPANEL.ViewModels.Approval.ApprovalVm
 
 <div class="col-md-4">
-    <p>@ViewBag.Starts - @ViewBag.Ends</p>
+    <p>@TempData["Starts"] - @TempData["Ends"]</p>
     <form asp-action="Approve" asp-controller="Events" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 

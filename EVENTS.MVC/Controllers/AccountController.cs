@@ -85,7 +85,9 @@ namespace EVENTS.MVC.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("token");
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("id");
             return RedirectToAction(nameof(Login), "Account");
         }
         

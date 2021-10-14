@@ -51,7 +51,8 @@ namespace ADMINPANEL.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("token");
+            HttpContext.Session.Remove("email");
             return RedirectToAction(nameof(Login), "Account");
         }
     }

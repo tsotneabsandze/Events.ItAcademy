@@ -1,0 +1,62 @@
+@model EVENTS.MVC.ViewModels.CreateEvent.CreateEventVm
+
+@{
+    ViewData["Title"] = "AddEvent";
+}
+
+<h1 >add event</h1>
+
+
+<form enctype="multipart/form-data" asp-controller="Events" asp-action="Create"
+      method="post" class="mt-3">
+
+    <div class="form-group">
+        <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+        <input asp-for="Title" class="form-control" placeholder="Title"/>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea class="form-control" asp-for="Description" asp-format="{0:yyyy-MM-ddTHH:mm}" rows="5">
+                    </textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Starts"></label>
+        <input class="form-control" asp-for="Starts" asp-format="{0:yyyy-MM-ddTHH:mm}"/>
+        <span asp-validation-for="Starts" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ends"></label>
+        <input class="form-control" asp-for="Ends" asp-format="{0:yyyy-MM-ddTHH:mm}"/>
+        <span asp-validation-for="Ends" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Photo" class="form-control custom-file-input"/>
+            <label class="custom-file-label">Choose Photo Here...</label>
+            <span asp-validation-for="Photo" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

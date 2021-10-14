@@ -29,7 +29,8 @@ namespace MEDIATOR.Events.Commands.ApproveEvent
                 if (date != default && date > entity.Starts)
                     throw new InvalidDateException("invalid date");
 
-                entity.CanBeEditedTill = request.CanBeEditedTill;
+                entity.CanBeEditedTill = request.CanBeEditedTill ?? entity.Starts;
+               
                 entity.IsApproved = true;
 
                 await EventRepo.UpdateAsync(entity, cancellationToken);

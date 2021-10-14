@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ using Common.Services.Abstractions;
 using Common.Services.Implementations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,10 +38,17 @@ namespace EVENTS.MVC
                     c.RegisterValidatorsFromAssemblyContaining(typeof(Startup));
                 });
             
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(4);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+            // services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory()
+            //     + Path.DirectorySeparatorChar + "DataProtection"));
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ISessionService), typeof(SessionService));
             services.AddScoped<CheckTokenFilter>();
+            services.AddScoped<IImageService, ImageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

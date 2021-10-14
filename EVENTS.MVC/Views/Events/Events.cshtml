@@ -1,0 +1,81 @@
+@model Common.Models.EventList.EventListVm
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (token is not null)
+{
+    <a asp-controller="Events" class="btn btn-primary" asp-action="UserEvents">My Events</a>
+    
+}
+@if ((string)@ViewData["Title"] == "User Events")
+{
+    <a class="btn btn-primary" asp-controller="Events" asp-action="Create">Add New</a>
+}
+
+@if (Model.Events.Any())
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+
+                <table class="table table-image">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col">Title</th>
+
+                        <th scope="col">Time</th>
+
+                        <th scope="col">Details</th>
+
+                        @if ((string)@ViewData["Title"] == "User Events")
+                        {
+                            <th scope="col">Edit</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var eventVm in Model.Events)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                @eventVm.Title
+                            </td>
+                            <td>
+                                @eventVm.Starts - @eventVm.Ends
+                            </td>
+                            <td>
+                                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventVm.Id" class="btn btn-primary">Details</a>
+                            </td>
+                            @if ((string)@ViewData["Title"] == "User Events")
+                            {
+                                @if (@eventVm.IsApproved)
+                                {
+                                    <td>
+                                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@eventVm.Id" class="btn btn-primary">Edit</a>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <br/>
+}
+else
+{
+    <div class=" mt-1 mb-1">
+
+        <hr/>
+        <h5 class="text-center">
+            Nothing to Show at the moment
+        </h5>
+    </div>
+}

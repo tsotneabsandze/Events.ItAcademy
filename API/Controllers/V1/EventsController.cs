@@ -69,12 +69,11 @@ namespace API.Controllers.V1
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Create([FromBody] CreateEventCommand command)
+        public async Task<ActionResult<int>> Create([FromBody] CreateEventCommand command)
         {
-            await Mediator.Send(command);
-            return NoContent();
+            var id = await Mediator.Send(command);
+            return Ok(id);
         }
 
 

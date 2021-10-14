@@ -14,7 +14,7 @@
                     <div class="carousel-item active">
                         <img class="d-block w-100 imgThumbnail" style="height:250px;width:auto"
                              src="data:image;base64,@System.Convert.ToBase64String(Model.Photo)"
-
+                             
                              alt="First slide" asp-append-version="true">
                     </div>
                 </div>
@@ -25,28 +25,16 @@
         <div class="card-header text-capitalize text-center">
             <h4>@Model.Title</h4>
             <h6>Id : @Model.Id</h6>
-            <h6>Approved : @Model.IsApproved</h6>
             <h6>Starts at : @Model.Starts </h6>
             <h6>Ends at : @Model.Ends</h6>
-            @if (@Model.CanBeEditedTill != default)
-            {
-                <h6>Can be edited till : @Model.CanBeEditedTill</h6>
-            }
 
-            @if (!@Model.IsApproved)
+            @if (@Model.IsApproved)
             {
-                <a asp-controller="Events" asp-action="Approve" asp-route-id="@Model.Id" class="btn btn-primary">Approve</a>
+                <a asp-controller="Events" asp-action="Edit" asp-route-id="@Model.Id"  class="btn btn-primary">Edit</a>
             }
 
             <br>
-            <form asp-controller="Events" asp-action="Delete" asp-route-id="@Model.Id" method="get">
-                <button type="submit" class="btn btn-danger"
-                        onclick="return confirm('Are your sure you want to delete [@Model.Title]' )">
-                    Delete
-                </button>
-            </form>
-            <br>
-            <a asp-controller="Events" asp-action="Index" class="btn btn-primary">Back</a>
+           <a asp-controller="Events" asp-action="Index" class="btn btn-primary">Back</a>
 
         </div>
         <div class="card-body">

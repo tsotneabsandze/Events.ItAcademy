@@ -88,8 +88,10 @@ namespace ADMINPANEL.Controllers
             var content = await response.Content.ReadAsStringAsync();
             var evnt = JsonConvert.DeserializeObject<EventVm>(content);
 
-            ViewBag.Starts = evnt.Starts;
-            ViewBag.Ends = evnt.Ends;
+            // ViewBag.Starts = evnt.Starts;
+            // ViewBag.Ends = evnt.Ends;
+            TempData["Starts"] = evnt.Starts;
+            TempData["Ends"] = evnt.Ends;
 
             return !response.IsSuccessStatusCode ? View("NotFound", id) : View();
         }
@@ -98,8 +100,7 @@ namespace ADMINPANEL.Controllers
         public async Task<IActionResult> Approve(ApprovalVm vm)
         {
             var date = vm.CanBeEditedTill;
-
-            var b = date > DateTime.Now;
+            
             if (ModelState.IsValid)
             {
                 var token = SessionService.GetToken();
@@ -115,11 +116,12 @@ namespace ADMINPANEL.Controllers
                 return RedirectToAction(nameof(Details), new { id = vm.Id });
             }
 
+
             ModelState.AddModelError(string.Empty, "invalid attempt");
             return View(vm);
         }
 
-        private async Task<EventListVm> GetEvents(string actionName = default)
+        private static async Task<EventListVm> GetEvents(string actionName = default)
         {
             var response =
                 await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Events/{actionName}");

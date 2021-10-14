@@ -1,0 +1,51 @@
+@model Common.Models.Event.EventVm
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-10">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <form asp-action="Edit" asp-controller="Events" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input hidden asp-for="Id">
+
+             <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea class="form-control" asp-for="Description" asp-format="{0:yyyy-MM-ddTHH:mm}" rows="5">
+                                </textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label asp-for="Starts"></label>
+                    <input class="form-control" asp-for="Starts" asp-format="{0:yyyy-MM-ddTHH:mm}"/>
+                    <span asp-validation-for="Starts" class="text-danger"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label asp-for="Ends"></label>
+                    <input class="form-control" asp-for="Ends" asp-format="{0:yyyy-MM-ddTHH:mm}"/>
+                    <span asp-validation-for="Ends" class="text-danger"></span>
+                </div>
+            
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Events" asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

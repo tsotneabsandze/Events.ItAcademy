@@ -30,22 +30,24 @@ namespace MEDIATOR.Events.Commands.UpdateEvent
 
                 if (entity is null)
                     throw new ResourceNotFoundException($"resource with id {request.Id} was not found");
-                
+
                 if (request.UserId != UserService.GetUser().Claims.First(x => x.Type == "id").Value)
                     throw new IdentifierMismatchException("event does not belong to specified user");
 
                 if (!(DateTime.Now < entity.CanBeEditedTill && entity.IsApproved))
                     throw new ResourceCanNotBeEditedException();
-                    
+
+
                 entity.Description = request.Description;
                 entity.Starts = request.Starts;
                 entity.Ends = request.Ends;
-                entity.Photo = request.Photo;
+                if (request.Photo != default)
+                    entity.Photo = request.Photo;
+
 
                 await EventRepo.UpdateAsync(entity, cancellationToken);
 
                 return Unit.Value;
-                
             }
         }
     }
