@@ -1,4 +1,5 @@
 using API.Extensions.Di;
+using API.Extensions.HealthChecks;
 using API.Extensions.Swagger;
 using API.Middlewares.ExceptionHandling;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation.AspNetCore;
+using INFRASTRUCTURE.Data;
 using MEDIATOR.Common.Models;
 
 
@@ -27,24 +29,27 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(opt =>
-                {
-                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status500InternalServerError));
-                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
-                    opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
-                    opt.Filters.Add(new ConsumesAttribute("application/json"));
-                    opt.Filters.Add(new ProducesAttribute("application/json"));
+                    {
+                        opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status500InternalServerError));
+                        opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
+                        opt.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
+                        opt.Filters.Add(new ConsumesAttribute("application/json"));
+                        opt.Filters.Add(new ProducesAttribute("application/json"));
 
-                    opt.ReturnHttpNotAcceptable = true;
-                }
-            ).AddNewtonsoftJson()
+                        opt.ReturnHttpNotAcceptable = true;
+                    }
+                ).AddNewtonsoftJson()
                 .AddFluentValidation(configuration =>
-            {
-                configuration.RegisterValidatorsFromAssemblyContaining<AuthResult>();
-            });
-
+                {
+                    configuration.RegisterValidatorsFromAssemblyContaining<AuthResult>();
+                });
+            
             services.AddServices(_config);
             services.AddAuth(_config);
 
+            services.AddHealthChecks()
+                .AddDbContextCheck<AppDbContext>();
+            
             services.AddVersioning();
             services.AddVersionAwareApiExplorer();
             services.AddSwaggerDocumentation();
@@ -55,7 +60,7 @@ namespace API
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-            
+
 
             app.UseMiddleware<GlobalExceptionHandler>();
 
@@ -64,11 +69,13 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.CheckHealths();
         }
     }
 }

@@ -26,7 +26,8 @@ namespace ADMINPANEL
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(
+                    options => { options.EnableEndpointRouting = false; })
                 .AddFluentValidation(c =>
                 {
                     c.RegisterValidatorsFromAssemblyContaining(typeof(LoginVm));
@@ -38,10 +39,8 @@ namespace ADMINPANEL
                 options.IdleTimeout = TimeSpan.FromHours(4);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
-            
-            // services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory()
-            //     + Path.DirectorySeparatorChar + "DataProtection"));
-            
+
+
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ISessionService), typeof(SessionService));
             services.AddScoped<CheckTokenFilter>();
