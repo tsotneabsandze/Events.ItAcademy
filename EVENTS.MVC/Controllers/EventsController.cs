@@ -1,9 +1,11 @@
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Common.ActionFilters;
 using Common.Constants;
+using Common.Models;
 using Common.Models.Event;
 using Common.Models.EventList;
 using EVENTS.MVC.ViewModels.CreateEvent;
@@ -15,10 +17,20 @@ namespace EVENTS.MVC.Controllers
     public class EventsController : BaseController
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageSize = 2, int pageIndex = 1)
         {
-            var events = await GetEvents("GetApprovedEvents");
+            var response =
+                await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Events?PageIndex={pageIndex}&PageSize={pageSize}");
+
+            var dataString = await response.Content.ReadAsStringAsync();
+
+            var paginatedResult = JsonConvert.DeserializeObject<PaginatedResult<EventListVm>>(dataString);
+
+            var events = paginatedResult.Content;
+
             @ViewData["Title"] = "Event List";
+            @ViewBag.PageCount =
+                (int)Math.Ceiling((decimal)(paginatedResult.Count / paginatedResult.PageSize));
 
             return View("Events", events);
         }
@@ -107,7 +119,6 @@ namespace EVENTS.MVC.Controllers
 
             var id = JsonConvert.DeserializeObject<int>(dataString);
             return RedirectToAction(nameof(Details), new { id });
-            
         }
 
 
@@ -154,16 +165,6 @@ namespace EVENTS.MVC.Controllers
             ModelState.AddModelError(string.Empty,
                 "invalid  attempt");
             return View(vm);
-        }
-
-        private async Task<EventListVm> GetEvents(string actionName = default)
-        {
-            var response =
-                await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Events/{actionName}");
-
-            var dataString = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<EventListVm>(dataString);
         }
     }
 }
