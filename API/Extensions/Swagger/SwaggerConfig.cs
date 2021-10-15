@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,31 @@ namespace API.Extensions.Swagger
 
         public void Configure(SwaggerGenOptions options)
         {
+            options.EnableAnnotations();
+          
+            var securitySchema = new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization:  {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            };
+
+            options.AddSecurityDefinition("Bearer", securitySchema);
+
+            var securityRequirement = new OpenApiSecurityRequirement
+            {
+                { securitySchema, new[] { "Bearer" } }
+            };
+
+            options.AddSecurityRequirement(securityRequirement);
+            
             foreach (var description in _provider.ApiVersionDescriptions)
             {
                 options.SwaggerDoc(description.GroupName,
@@ -42,6 +68,8 @@ namespace API.Extensions.Swagger
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
+            
+            
         }
     }
 }

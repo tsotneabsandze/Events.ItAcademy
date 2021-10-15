@@ -4,6 +4,77 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="M:API.Controllers.V1.AccountController.PartiallyUpdateUser(System.String,MEDIATOR.Account.Commands.PartialUpdateUser.PartialUpdateUserCommand)">
+             <summary>
+             update user
+             </summary>
+             <param name="id">user id</param>
+             <param name="command">data</param>
+             <remarks>
+             Sample request
+             
+                 {
+                     "id": "b1fa6849-6ff1-410c-a8fa-01087089c089",
+                     "email": "grisha@gmail.com",
+                     "name": "grisha",
+                     "lastName": "oniani"
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:API.Controllers.V1.EventsController.Create(MEDIATOR.Events.Commands.CreateEvent.CreateEventCommand)">
+             <summary>
+             Create a new event
+             </summary>
+             <param name="command">event data</param>
+             <remarks>
+             Sample request
+             
+                 {
+                     "title": "title of the event",
+                     "description": "description of the event",
+                     "starts": "2021-10-15T20:10:57.727Z",
+                     "ends": "2021-10-15T20:10:57.727Z",
+                     "photo": byte array
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:API.Controllers.V1.EventsController.ApproveEvent(MEDIATOR.Events.Commands.ApproveEvent.ApproveEventCommand)">
+             <summary>
+             approve event
+             </summary>
+             <param name="cmd">data</param>
+             <remarks>
+             Sample request:
+             
+                 {
+                     "id": 10,
+                     "canBeEditedTill": "2021-10-15 20:00:00"
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:API.Controllers.V1.EventsController.UpdateEvent(System.Int32,MEDIATOR.Events.Commands.UpdateEvent.UpdateEventCommand)">
+             <summary>
+             update event
+             </summary>
+             <param name="id">event id</param>
+             <param name="cmd">data</param>
+             <remarks>
+             Sample request
+             
+                 {
+                     "id": 29,
+                     "description": "some text",
+                     "starts": "2021-10-15T20:05:03.442Z",
+                     "ends": "2021-10-15T20:05:03.442Z",
+                     "photo": "byte array",
+                     "userId": "b1fa6849-6ff1-410c-a8fa-01087089c089"
+                 }
+            
+             </remarks>
+        </member>
         <member name="M:API.Controllers.V2.EventsController.Test">
             <summary>
             test comment from summary

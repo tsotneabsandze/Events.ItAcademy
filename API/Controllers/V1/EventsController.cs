@@ -14,6 +14,7 @@ using MEDIATOR.Events.Queries.GetEventsList.GetUnapprovedEvents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers.V1
 {
@@ -24,6 +25,11 @@ namespace API.Controllers.V1
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(
+            Summary = "Gets full list of events",
+            Description =
+                "returns paginated list of events.you can customize pagination results by including pageSize and pageIndex query parameters in the request"
+        )]
         public async Task<ActionResult<PaginatedResult<EventsListVm>>> GetAll([FromQuery] SpecParams specParams)
         {
             var vm = await Mediator.Send(new GetEventsListQuery { SpecParams = specParams });
@@ -33,6 +39,7 @@ namespace API.Controllers.V1
         [HttpGet("[action]")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Gets  list of approved events")]
         public async Task<ActionResult<EventsListVm>> GetApprovedEvents(SpecParams specParams)
         {
             var vm = await Mediator.Send(new GetApprovedEventsQuery());
@@ -42,6 +49,7 @@ namespace API.Controllers.V1
         [HttpGet("[action]")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Gets full list of unapproved events")]
         public async Task<ActionResult<EventsListVm>> GetUnapprovedEvents()
         {
             var vm = await Mediator.Send(new GetUnapprovedEventsQuery());
@@ -52,6 +60,7 @@ namespace API.Controllers.V1
         [HttpGet("[action]/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = "Retrieves events which belong to user with specified id")]
         public async Task<ActionResult<EventsListVm>> GetEventsByUser(string id)
         {
             var vm = await Mediator.Send(new GetSpecificUserEventsQuery { Id = id });
@@ -62,6 +71,7 @@ namespace API.Controllers.V1
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = "Gets event with specified id")]
         public async Task<ActionResult<EventDto>> Get(int id)
         {
             var vm = await Mediator.Send(new GetEventDetailQuery { Id = id });
@@ -69,6 +79,22 @@ namespace API.Controllers.V1
             return Ok(vm);
         }
 
+        /// <summary>
+        /// Create a new event
+        /// </summary>
+        /// <param name="command">event data</param>
+        /// <remarks>
+        /// Sample request
+        /// 
+        ///     {
+        ///         "title": "title of the event",
+        ///         "description": "description of the event",
+        ///         "starts": "2021-10-15T20:10:57.727Z",
+        ///         "ends": "2021-10-15T20:10:57.727Z",
+        ///         "photo": byte array
+        ///     }
+        ///
+        /// </remarks>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<int>> Create([FromBody] CreateEventCommand command)
@@ -83,12 +109,27 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [SwaggerOperation(Summary = "Deletes event by passed id value")]
         public async Task<IActionResult> Delete(int id)
         {
             await Mediator.Send(new DeleteEventCommand { Id = id });
             return NoContent();
         }
 
+
+        /// <summary>
+        /// approve event
+        /// </summary>
+        /// <param name="cmd">data</param>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///         "id": 10,
+        ///         "canBeEditedTill": "2021-10-15 20:00:00"
+        ///     }
+        ///
+        /// </remarks>
         [HttpPut]
         [Authorize("RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -99,7 +140,26 @@ namespace API.Controllers.V1
             await Mediator.Send(cmd);
             return NoContent();
         }
+        
 
+        /// <summary>
+        /// update event
+        /// </summary>
+        /// <param name="id">event id</param>
+        /// <param name="cmd">data</param>
+        /// <remarks>
+        /// Sample request
+        /// 
+        ///     {
+        ///         "id": 29,
+        ///         "description": "some text",
+        ///         "starts": "2021-10-15T20:05:03.442Z",
+        ///         "ends": "2021-10-15T20:05:03.442Z",
+        ///         "photo": "byte array",
+        ///         "userId": "b1fa6849-6ff1-410c-a8fa-01087089c089"
+        ///     }
+        ///
+        /// </remarks>
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Basic")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
