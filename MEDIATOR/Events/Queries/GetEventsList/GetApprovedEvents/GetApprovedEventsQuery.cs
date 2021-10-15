@@ -12,7 +12,6 @@ namespace MEDIATOR.Events.Queries.GetEventsList.GetApprovedEvents
 {
     public class GetApprovedEventsQuery: IRequest<EventsListVm>
     {
-
         public class GetApprovedEventsQueryHandler : BaseRequestHandler<GetApprovedEventsQuery,EventsListVm>
         {
             public GetApprovedEventsQueryHandler(IServiceProvider service) : base(service)

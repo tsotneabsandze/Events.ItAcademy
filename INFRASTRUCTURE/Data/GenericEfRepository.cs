@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CORE.Entities;
 using CORE.Interfaces;
 using CORE.Specifications;
-using INFRASTRUCTURE.Identity.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace INFRASTRUCTURE.Data
@@ -49,14 +48,21 @@ namespace INFRASTRUCTURE.Data
         }
 
         public async Task<T> GetItemWithSpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
-        {
-            return await ApplySpecification(spec).FirstOrDefaultAsync(cancellationToken);
-        }
+            => await ApplySpecification(spec).FirstOrDefaultAsync(cancellationToken);
 
-        public async Task<IReadOnlyList<T>> ListBySpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
-        {
-            return await ApplySpecification(spec).ToListAsync(cancellationToken: cancellationToken);
-        }
+
+        public async Task<IReadOnlyList<T>> ListBySpecAsync(ISpecification<T> spec,
+            CancellationToken cancellationToken = default)
+            => await ApplySpecification(spec).ToListAsync(cancellationToken: cancellationToken);
+
+
+        public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+            => await Ctx.Set<T>().CountAsync(cancellationToken);
+
+
+        public async Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
+            => await ApplySpecification(spec).CountAsync(cancellationToken);
+
 
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {

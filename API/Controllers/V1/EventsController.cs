@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CORE.Specifications;
 using MEDIATOR.Common.Models;
 using MEDIATOR.Events.Commands.ApproveEvent;
 using MEDIATOR.Events.Commands.CreateEvent;
@@ -23,16 +24,16 @@ namespace API.Controllers.V1
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<EventsListVm>> GetAll()
+        public async Task<ActionResult<PaginatedResult<EventsListVm>>> GetAll([FromQuery] SpecParams specParams)
         {
-            var vm = await Mediator.Send(new GetEventsListQuery());
+            var vm = await Mediator.Send(new GetEventsListQuery { SpecParams = specParams });
             return Ok(vm);
         }
 
         [HttpGet("[action]")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<EventsListVm>> GetApprovedEvents()
+        public async Task<ActionResult<EventsListVm>> GetApprovedEvents(SpecParams specParams)
         {
             var vm = await Mediator.Send(new GetApprovedEventsQuery());
             return Ok(vm);

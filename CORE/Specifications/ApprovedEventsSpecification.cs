@@ -7,6 +7,7 @@ namespace CORE.Specifications
         public ApprovedEventsSpecification()
             : base(x => x.IsApproved)
         {
+            AddOrderBy(x => x.Starts);
         }
     }
 }

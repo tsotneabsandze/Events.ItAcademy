@@ -15,5 +15,7 @@ namespace CORE.Interfaces
         Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
         Task<T> GetItemWithSpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListBySpecAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(CancellationToken cancellationToken = default);
+        Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
     }
 }

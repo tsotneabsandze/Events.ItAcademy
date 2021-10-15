@@ -6,6 +6,7 @@ namespace CORE.Specifications
     {
         public UnapprovedEventsSpecification() : base(x => !x.IsApproved)
         {
+            AddOrderBy(x=>x.Starts);
         }
     }
 }
