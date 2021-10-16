@@ -1,6 +1,6 @@
 using System;
 
-namespace MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList
+namespace ArchiveService.Models
 {
     public class PartialEventDto
     {

@@ -213,11 +213,11 @@ namespace API.Controllers.V1
 
         
         [AllowAnonymous]
-        [HttpPut("[action]/{id:int}")]
+        [HttpPut("[action]")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> AddToArchive(int id)
+        public async Task<IActionResult> AddToArchive([FromBody]ArchiveEventCommand cmd)
         {
-            await Mediator.Send(new ArchiveEventCommand { Id = id });
+            await Mediator.Send(cmd);
             return NoContent();
         }
 
