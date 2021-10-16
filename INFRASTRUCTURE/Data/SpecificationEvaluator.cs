@@ -24,9 +24,6 @@ namespace INFRASTRUCTURE.Data
                 query = query.OrderBy(spec.OrderByDescending);
             
 
-            query = spec.Filters.Aggregate(query, (currentQuery, filter) =>
-                currentQuery.Where(filter));
-
             if (spec.IsPagingEnabled)
                 query = query.Skip(spec.Skip).Take(spec.Take);
             

@@ -26,9 +26,7 @@ namespace CORE.Specifications
         public int Skip { get; private set; }
 
         public bool IsPagingEnabled { get; private set; }
-
-        public List<Expression<Func<T, bool>>> Filters { get; } =
-            new List<Expression<Func<T, bool>>>();
+        
 
         public List<Expression<Func<T, object>>> Includes { get; set; } =
             new List<Expression<Func<T, object>>>();
@@ -39,12 +37,7 @@ namespace CORE.Specifications
         {
             filters.Add(filterToAdd);
         }
-
-        protected void AddInclude(List<Func<T, object>> includes,
-            Expression<Func<T, object>> expressionToInclude)
-        {
-            Includes.Add(expressionToInclude);
-        }
+        
 
         protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
         {

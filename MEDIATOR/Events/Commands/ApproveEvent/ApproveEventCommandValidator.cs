@@ -9,7 +9,9 @@ namespace MEDIATOR.Events.Commands.ApproveEvent
         public ApproveEventCommandValidator()
         {
             RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.CanBeEditedTill).GreaterThan(DateTime.Now);
+            RuleFor(x => x.CanBeEditedTill)
+                .GreaterThan(DateTime.Now)
+                .WithMessage("provided value should be greater than current time");
         }
     }
 }

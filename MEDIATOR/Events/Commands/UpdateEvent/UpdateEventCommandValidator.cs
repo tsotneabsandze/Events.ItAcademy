@@ -7,14 +7,29 @@ namespace MEDIATOR.Events.Commands.UpdateEvent
     {
         public UpdateEventCommandValidator()
         {
-            RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Description).MaximumLength(500).NotEmpty();
+            RuleFor(x => x.Id)
+                .NotEmpty();
+            
+            RuleFor(x => x.Description).MaximumLength(500)
+                .WithMessage("description can be maximum of 500 characters long")
+                .NotEmpty();
 
-            RuleFor(x => x.Starts > DateTime.Now).NotEmpty();
-            RuleFor(x => x.Ends > DateTime.Now).NotEmpty();
+            RuleFor(x => x.Starts)
+                .GreaterThan(DateTime.Now)
+                .WithMessage("starting time should not be less than current time")
+                .NotEmpty();
+            
+            RuleFor(x => x.Ends).GreaterThan(DateTime.Now)
+                .WithMessage("invalid date")
+                .NotEmpty();
 
-            RuleFor(x => x.Starts).LessThan(x=>x.Ends);
-            RuleFor(x => x.UserId).NotEmpty();
+            RuleFor(x => x.Starts)
+                .LessThan(x=>x.Ends)
+                .WithMessage("invalid date");
+            
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .WithMessage("User id must be provided");
         }
     }
 }
