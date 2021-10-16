@@ -16,4 +16,8 @@
       <ProjectReference Include="..\INFRASTRUCTURE\INFRASTRUCTURE.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Events\Queries\GetEventsList\UnarchivedEventsList" />
+    </ItemGroup>
+
 </Project>

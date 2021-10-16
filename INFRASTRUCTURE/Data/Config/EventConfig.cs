@@ -23,6 +23,9 @@ namespace INFRASTRUCTURE.Data.Config
 
             builder.Property(x => x.IsApproved)
                 .HasDefaultValue(false);
+            
+            builder.Property(x => x.IsArchived)
+                .HasDefaultValue(false);
 
             builder.Property(x => x.Photo)
                 .HasColumnType("varbinary(MAX)");

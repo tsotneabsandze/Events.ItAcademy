@@ -1,20 +1,25 @@
-using System.Threading.Tasks;
 using CORE.Specifications;
 using MEDIATOR.Common.Models;
-using MEDIATOR.Events.Commands.ApproveEvent;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using MEDIATOR.Events.Commands.CreateEvent;
 using MEDIATOR.Events.Commands.DeleteEvent;
 using MEDIATOR.Events.Commands.UpdateEvent;
-using MEDIATOR.Events.Queries.GetEventDetail;
+using MEDIATOR.Events.Commands.ApproveEvent;
+using MEDIATOR.Events.Commands.ArchiveEvent;
 using MEDIATOR.Events.Queries.GetEventsList;
+using MEDIATOR.Events.Queries.GetEventDetail;
+using MEDIATOR.Events.Queries.GetEventsList.ArchivedEventsList.GetArchivedEvents;
 using MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList;
-using MEDIATOR.Events.Queries.GetEventsList.GetApprovedEvents;
-using MEDIATOR.Events.Queries.GetEventsList.GetSpecificUserEvents;
-using MEDIATOR.Events.Queries.GetEventsList.GetUnapprovedEvents;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetApprovedEvents;
+using MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetSpecificUsersEvents;
+using MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetUnapprovedEvents;
+using MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetUnarchivedEventsList;
+
 
 namespace API.Controllers.V1
 {
@@ -26,30 +31,51 @@ namespace API.Controllers.V1
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(
-            Summary = "Gets full list of events",
+            Summary = "Gets archived  list of events",
             Description =
                 "returns paginated list of events.you can customize pagination results by including pageSize and pageIndex query parameters in the request"
         )]
-        public async Task<ActionResult<PaginatedResult<EventsListVm>>> GetAll([FromQuery] SpecParams specParams)
+        public async Task<ActionResult<PaginatedResult<EventsListVm>>> GetUnarchivedList([FromQuery] SpecParams specParams)
         {
-            var vm = await Mediator.Send(new GetEventsListQuery { SpecParams = specParams });
+            var vm = await Mediator.Send(new GetUnarchivedEventsListQuery { SpecParams = specParams });
+            return Ok(vm);
+        }
+        
+        //
+        [HttpGet("[action]")]
+        [Authorize(policy: "RequireAdminRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerOperation(
+            Summary = "Gets unarchived list of events"
+        )]
+        public async Task<ActionResult<PaginatedResult<EventsListVm>>> GetArchivedList()
+        {
+            var vm = await Mediator.Send(new GetArchivedEventsListQuery());
             return Ok(vm);
         }
 
+        
         [HttpGet("[action]")]
-        [AllowAnonymous]
+        [Authorize(policy: "RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Gets  list of approved events")]
-        public async Task<ActionResult<EventsListVm>> GetApprovedEvents(SpecParams specParams)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerOperation(Summary = "Gets  list of unarchived, approved events")]
+        public async Task<ActionResult<EventsListVm>> GetApprovedEvents()
         {
             var vm = await Mediator.Send(new GetApprovedEventsQuery());
             return Ok(vm);
         }
 
+       
         [HttpGet("[action]")]
-        [AllowAnonymous]
+        [Authorize(policy: "RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Gets full list of unapproved events")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerOperation(Summary = "Gets full list of unarchived, unapproved events")]
         public async Task<ActionResult<EventsListVm>> GetUnapprovedEvents()
         {
             var vm = await Mediator.Send(new GetUnapprovedEventsQuery());
@@ -109,6 +135,7 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation(Summary = "Deletes event by passed id value")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -135,12 +162,13 @@ namespace API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ApproveEvent([FromBody] ApproveEventCommand cmd)
         {
             await Mediator.Send(cmd);
             return NoContent();
         }
-        
+
 
         /// <summary>
         /// update event
@@ -170,5 +198,30 @@ namespace API.Controllers.V1
             await Mediator.Send(cmd);
             return NoContent();
         }
+
+
+        #region only for background worker
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ActionResult<IReadOnlyList<PartialEventDto>>> GetFullList()
+        {
+            var vm = await Mediator.Send(new GetAllEventsListQuery());
+            return Ok(vm);
+        }
+
+        
+        [AllowAnonymous]
+        [HttpPut("[action]/{id:int}")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> AddToArchive(int id)
+        {
+            await Mediator.Send(new ArchiveEventCommand { Id = id });
+            return NoContent();
+        }
+
+
+        #endregion
     }
 }

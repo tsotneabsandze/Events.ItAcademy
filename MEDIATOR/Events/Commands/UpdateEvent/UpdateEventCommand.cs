@@ -30,6 +30,9 @@ namespace MEDIATOR.Events.Commands.UpdateEvent
 
                 if (entity is null)
                     throw new ResourceNotFoundException($"resource with id {request.Id} was not found");
+                
+                if (entity.IsArchived)
+                    throw new InvalidArchivingException("Archived event can not be updated");
 
                 if (request.UserId != UserService.GetUser().Claims.First(x => x.Type == "id").Value)
                     throw new IdentifierMismatchException("event does not belong to specified user");

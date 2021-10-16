@@ -91,6 +91,15 @@ namespace API.Middlewares.ExceptionHandling
             LogLevel = LogLevel.Information;
         }
 
+        private void BindException(InvalidArchivingException ex)
+        {
+            Name = HttpStatusCode.BadRequest.ToString();
+            Status = (int)HttpStatusCode.BadRequest;
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+            Title = ex.Message;
+            LogLevel = LogLevel.Information;
+        }
+
         private void BindException(Exception exception)
         {
         }

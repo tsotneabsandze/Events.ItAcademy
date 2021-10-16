@@ -4,12 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using CORE.Exceptions;
 using CORE.Specifications;
+using CORE.Specifications.EventSpecifications.Unarchived;
 using Mapster;
 using MEDIATOR.Common.Abstractions;
 using MEDIATOR.Common.Models;
 using MediatR;
 
-namespace MEDIATOR.Events.Queries.GetEventsList.GetSpecificUserEvents
+namespace MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetSpecificUsersEvents
 {
     public class GetSpecificUserEventsQuery : IRequest<EventsListVm>
     {

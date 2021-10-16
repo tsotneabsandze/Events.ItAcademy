@@ -1,12 +1,11 @@
-using System;
 using CORE.Entities;
 
-namespace CORE.Specifications
+namespace CORE.Specifications.EventSpecifications.Unarchived
 {
     public class ApprovedEventsSpecification : BaseSpecification<Event>
     {
         public ApprovedEventsSpecification()
-            : base(x => x.IsApproved && x.Ends > DateTime.Now)
+            : base(x => x.IsApproved && !x.IsArchived)
         {
             AddOrderBy(x => x.Starts);
         }

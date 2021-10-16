@@ -25,16 +25,19 @@ namespace MEDIATOR.Events.Commands.ApproveEvent
                 if (entity is null)
                     throw new ResourceNotFoundException($"resource with id {request.Id} was not found");
 
+                if (entity.IsArchived)
+                    throw new InvalidArchivingException("Archived event can not be approved");
+
                 var date = request.CanBeEditedTill;
                 if (date != default && date > entity.Starts)
                     throw new InvalidDateException("invalid date");
 
                 entity.CanBeEditedTill = request.CanBeEditedTill ?? entity.Starts;
-               
+
                 entity.IsApproved = true;
 
                 await EventRepo.UpdateAsync(entity, cancellationToken);
-                
+
                 return Unit.Value;
             }
         }

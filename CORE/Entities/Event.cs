@@ -10,7 +10,8 @@ namespace CORE.Entities
         public DateTime? CanBeEditedTill { get; set; }
         public DateTime Starts { get; set; }
         public DateTime Ends { get; set; }
-        public byte[] Photo { get; set; }   
+        public byte[] Photo { get; set; }
+        public bool IsArchived { get; set; }
 
         public string UserId { get; set; }
     }

@@ -2,29 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CORE.Entities;
 using CORE.Specifications;
+using CORE.Specifications.EventSpecifications.Unarchived;
 using Mapster;
 using MEDIATOR.Common.Abstractions;
 using MEDIATOR.Common.Models;
 using MediatR;
 
-namespace MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList
+namespace MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetUnarchivedEventsList
 {
-    public class GetEventsListQuery : IRequest<PaginatedResult<EventsListVm>>
+    public class GetUnarchivedEventsListQuery : IRequest<PaginatedResult<EventsListVm>>
     {
         public SpecParams SpecParams { get; set; }
 
-        public class GetEventsListQueryHandler : BaseRequestHandler<GetEventsListQuery, PaginatedResult<EventsListVm>>
+        public class GetEventsListQueryHandler : BaseRequestHandler<GetUnarchivedEventsListQuery, PaginatedResult<EventsListVm>>
         {
             public GetEventsListQueryHandler(IServiceProvider service) : base(service)
             {
             }
 
-            public override async Task<PaginatedResult<EventsListVm>> Handle(GetEventsListQuery request,
+            public override async Task<PaginatedResult<EventsListVm>> Handle(GetUnarchivedEventsListQuery request,
                 CancellationToken cancellationToken)
             {
-                var spec = new OrderedEventsListSpecification(request.SpecParams);
+                var spec = new UnarchivedOrderedEventsListSpecification(request.SpecParams);
+                var countSpec = new ValidEventsCountSpecification();
+                
                 var events = await EventRepo.ListBySpecAsync(spec, cancellationToken);
 
                 var content = new EventsListVm
@@ -35,7 +37,7 @@ namespace MEDIATOR.Events.Queries.GetEventsList.GetAllEventsList
                 var paginatedResult = new PaginatedResult<EventsListVm>
                 {
                     Content = content,
-                    Count = await EventRepo.CountAsync(cancellationToken),
+                    Count = await EventRepo.CountAsync(countSpec,cancellationToken),
                     PageIndex = request.SpecParams.PageIndex,
                     PageSize = request.SpecParams.PageSize
                 };

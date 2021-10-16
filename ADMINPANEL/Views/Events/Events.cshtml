@@ -7,7 +7,9 @@
 
 <a asp-controller="Events" class="btn btn-primary" asp-action="UnapprovedEvents">Unapproved Events</a>
 
-@if (Model.Events.Any())
+<a asp-controller="Events" class="btn btn-primary" asp-action="ArchivedEvents">Archived Events</a>
+
+@if (@Model.Events.Any())
 {
     <div class="container">
         <div class="row">
@@ -47,8 +49,10 @@
                             @if ((string)@ViewData["Title"] == "Unapproved Event List")
                             {
                                 <td>
-                                    <a asp-controller="Events"  asp-action="Approve" asp-route-id="@eventVm.Id" 
-                                       class="btn btn-primary">Approve</a>
+                                    <a asp-controller="Events" asp-action="Approve" asp-route-id="@eventVm.Id"
+                                       class="btn btn-primary">
+                                        Approve
+                                    </a>
                                 </td>
                             }
                             <td>
@@ -70,6 +74,22 @@
         </div>
     </div>
     <br/>
+
+    @if ((string)@ViewData["Title"] == "Event List")
+    {
+        <div class="d-flex justify-content-center">
+            <nav aria-label="...">
+                <ul class="pagination pagination-md">
+                    @for (int i = 1; i <= (int)ViewBag.PageCount + 1; i++)
+                    {
+                        <li class="page-item ">
+                            <a class="page-link" asp-action="Index" asp-route-pageIndex="@i" tabindex="-1">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
 }
 else
 {

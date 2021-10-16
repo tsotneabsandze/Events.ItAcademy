@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CORE.Specifications;
+using CORE.Specifications.EventSpecifications.Unarchived;
 using Mapster;
 using MEDIATOR.Common.Abstractions;
 using MEDIATOR.Common.Models;
 using MediatR;
 
-namespace MEDIATOR.Events.Queries.GetEventsList.GetUnapprovedEvents
+namespace MEDIATOR.Events.Queries.GetEventsList.UnarchivedEventsList.GetUnapprovedEvents
 {
     public class GetUnapprovedEventsQuery: IRequest<EventsListVm>
     {
