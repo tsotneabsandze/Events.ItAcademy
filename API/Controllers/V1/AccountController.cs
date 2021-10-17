@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using MEDIATOR.Account.Commands.DeleteUser;
 using MEDIATOR.Account.Commands.PartialUpdateUser;
@@ -10,7 +9,6 @@ using MEDIATOR.Account.Queries.GetUserDetails.GetUserDetailsById;
 using MEDIATOR.Account.Queries.GetUsersList;
 using MEDIATOR.Common.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

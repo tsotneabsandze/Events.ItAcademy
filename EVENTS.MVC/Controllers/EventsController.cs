@@ -39,8 +39,11 @@ namespace EVENTS.MVC.Controllers
         [ServiceFilter(typeof(CheckTokenFilter))]
         public async Task<IActionResult> UserEvents()
         {
+            var id = SessionService.GetId();
+            var url = $"{ApiConstants.BaseApiUrl}/Events/GetEventsByUser/{id}";
             var response =
-                await Client.GetAsync($"{ApiConstants.BaseApiUrl}/Events/GetEventsByUser/{SessionService.GetId()}");
+                await Client.GetAsync(url
+                    );
 
             var dataString = await response.Content.ReadAsStringAsync();
 

@@ -41,7 +41,7 @@ namespace API.Controllers.V1
             return Ok(vm);
         }
         
-        //
+        
         [HttpGet("[action]")]
         [Authorize(policy: "RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status200OK)]

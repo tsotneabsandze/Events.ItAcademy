@@ -16,7 +16,7 @@ namespace Common.ActionFilters
     
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (_sessionService.GetToken() is null)
+            if (string.IsNullOrEmpty(_sessionService.GetToken()))
             {
                 context.Result = new RedirectToRouteResult(
                     new RouteValueDictionary

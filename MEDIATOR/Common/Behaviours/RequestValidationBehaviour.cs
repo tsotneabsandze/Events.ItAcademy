@@ -22,7 +22,6 @@ namespace MEDIATOR.Common.Behaviours
 
         public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            //var context = new ValidationContext(request);
 
             var failures = _validators
                 .Select(v => v.Validate(request))

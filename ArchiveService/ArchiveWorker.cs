@@ -33,6 +33,7 @@ namespace ArchiveService
                 _schedule.GetNextOccurrence(now);
                 if (now > _nextRun)
                 {
+                    await Task.Delay(30000, stoppingToken);
                     Console.WriteLine( DateTime.Now.ToString("F"));
                     await _client.EvaluateEvents();
                     _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
