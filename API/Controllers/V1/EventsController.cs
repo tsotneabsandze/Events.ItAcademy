@@ -220,8 +220,7 @@ namespace API.Controllers.V1
             await Mediator.Send(cmd);
             return NoContent();
         }
-
-
+        
         #endregion
     }
 }

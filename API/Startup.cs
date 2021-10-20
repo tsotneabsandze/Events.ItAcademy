@@ -44,12 +44,15 @@ namespace API
                     configuration.RegisterValidatorsFromAssemblyContaining<AuthResult>();
                 });
             
+            services.Configure<ApiBehaviorOptions>(opt =>
+                opt.SuppressModelStateInvalidFilter = true);
+
             services.AddServices(_config);
             services.AddAuth(_config);
 
             services.AddHealthChecks()
                 .AddDbContextCheck<AppDbContext>();
-            
+
             services.AddVersioning();
             services.AddVersionAwareApiExplorer();
             services.AddSwaggerDocumentation();

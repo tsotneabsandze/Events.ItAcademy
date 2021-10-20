@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,11 +24,10 @@ namespace ArchiveService
         public async Task EvaluateEvents()
         {
             var events = await GetList();
-            foreach (var record in events)
+            foreach (var record in events.Where(record =>
+                !record.IsArchived && record.Ends < DateTime.Now))
             {
-                if (!record.IsArchived && record.Ends < DateTime.Now)
-                    await AddToArchive(record.Id);
-                        
+                await AddToArchive(record.Id);
             }
         }
 

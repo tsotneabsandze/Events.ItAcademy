@@ -7,4 +7,4 @@ namespace MEDIATOR.Common.Models
         public int Count { get; set; }
         public T Content { get; set; }
     }
-}   
+}
